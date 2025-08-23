@@ -1,8 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'], // Así Vite reconoce todo tu código
-    theme: {
-      extend: {},
+  content: [
+    "./index.html",
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        space: ['Space Grotesk', 'sans-serif'],
+        rubik80s: ['Rubik 80s Fade', 'cursive'],
+      },
+      colors: {
+        lightBg: '#ECECEC',
+      },
     },
-    plugins: [],
-  }
+  },
+  plugins: [],
+}

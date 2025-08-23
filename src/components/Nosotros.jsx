@@ -1,102 +1,38 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useInView } from "react-intersection-observer";
-
-function Nosotros() {
-  const nosotrosRef = useRef(null);
-  const { ref: videoRef, inView: isVideoVisible } = useInView({
-    threshold: 0.3,
-    triggerOnce: false,
-  });
-
-  const videoElementRef = useRef(null);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkIfMobile();
-    window.addEventListener("resize", checkIfMobile);
-    return () => window.removeEventListener("resize", checkIfMobile);
-  }, []);
-
-  const toggleMute = () => {
-    const video = videoElementRef.current;
-    if (video) {
-      video.muted = !video.muted;
-      setIsMuted(video.muted);
-    }
-  };
-
+export default function HeroSection() {
   return (
-    <>
-      <section className="nosotros-first-section h-[70vh] bg-[#78b9ca] flex flex-col justify-center items-center relative">
-        <h2
-          ref={nosotrosRef}
-          id="nosotros"
-          className="text-white text-3xl md:text-7xl w-[65%] md:w-[55%] font-[Inter] font-black text-center m-10"
-        >
-          Transformar a través del cuerpo, la mente y la montaña
-        </h2>
-        <p className="text-white md:text-normal w-[70%] md:w-[50%] font-[Inter] text-justify">
-          Somos un equipo con más de 30 años de experiencia donde florecen{" "}
-          <span className="font-bold">proyectos de transformación social</span>,
-          como la Educación Contempl-Activa y Escalada consciente: Escuela de Escalada,
-          que promueven el aprendizaje vivencial y el desarrollo humano.
-        </p>
-        <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[-35px] flex justify-center items-center">
-          <div className="w-[70px] h-[70px] bg-[url('/img/arrow.webp')] bg-contain bg-no-repeat animate-bounce"></div>
+    <section className="relative h-[80vh] w-full bg-[#ECECEC] flex items-start justify-start overflow-hidden mb-0">
+
+      {/* Texto gigante en el fondo */}
+      <h1 className="absolute text-nowrap top-100 left-1/2 -translate-x-1/3 font-rubik80s text-[10vw] leading-none text-[#0A0F0D] opacity-90 z-0 text-center tracking-tight z-10 ">
+        CÓDIG* REAL
+      </h1>
+      {/* Contenido principal */}
+      
+      <div className="relative flex flex-row w-[%] w-full gap-10 items-center">
+        
+        {/* Imagen */}
+        <div className="md:w-1/2 h-[500px] md:h-[500px] flex items-center justify-start pl-5">
+          <img 
+            src="img/FOTONOSOTROS.png" 
+            alt="Nosotros" 
+            className="w-full h-full object-cover rounded-2xl shadow-lg"
+          />
         </div>
-      </section>
 
-      <section className="nosotros-second-section h-[70vh] md:h-[50vh] flex flex-col md:flex-row text-white bg-[url('/img/montana-quienesomos.webp')] bg-cover bg-center">
-        <div className="h-[100%] md:w-[50vw]"></div>
-
-        <div className="w-full md:w-[50vw] bg-[#4834d4] md:bg-[#5447b4]/90 flex flex-col justify-center items-center">
-          <article className="w-[70%] m-10">
-            A través de la escalada, ofrecemos clases para{" "}
-            <span className="font-bold italic">niños, jóvenes y adultos</span>,
-            en un ambiente inclusivo, seguro y retador.
-          </article>
-          <article className="w-[70%] mb-10">
-            Entrenamos en rocódromo con la{" "}
-            <span className="font-bold italic">
-              mirada puesta en la montaña
-            </span>
-            , como medio para cultivar la confianza, la presencia y la conexión
-            con la naturaleza. Aquí, cada ruta es una oportunidad para crecer
-            desde adentro hacia afuera.
-          </article>
+        {/* Texto */}
+        <div className=" w-1/2 flex flex-col gap-6">
+          <p className="text-sm font-space text-[#0A0F0D]">
+            Diseño + programación + SEO.
+          </p>
+          <h2 className="text-2xl md:text-4xl font-space text-[#0A0F0D] leading-tight">
+            ESCRIBIMOS{" "}
+            <span className="font-bold">CÓDIG* QUE IMPULSA</span>{" "}
+            NEGOCIOS ESCALABLES.
+          </h2>
         </div>
-      </section>
+      </div>
 
-      <section
-        ref={videoRef}
-        className="relative photo-section h-[70vh] w-full flex items-center justify-center bg-black overflow-hidden"
-      >
-        <video
-          ref={videoElementRef}
-          src={isMobile ? "img/cdpsite-mobile.mp4" : "img/cdpsite-dekstop.mp4"}
-          className={`h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
-            isVideoVisible ? "opacity-100" : "opacity-0"
-          }`}
-          autoPlay
-          muted={isMuted}
-          playsInline
-          loop
-        />
-        {isVideoVisible && (
-          <button
-            onClick={toggleMute}
-            className="absolute top-4 right-4 bg-black/60 text-white px-3 py-2 rounded-full text-sm hover:bg-black/80 transition"
-          >
-            {isMuted ? "🔇 Activar Audio" : "🔊 Silenciar"}
-          </button>
-        )}
-      </section>
-    </>
+    
+    </section>
   );
 }
-
-export default Nosotros;

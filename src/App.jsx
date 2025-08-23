@@ -10,16 +10,16 @@ import { HelmetProvider } from "react-helmet-async";
 const Nosotros = lazy(() => import("./components/Nosotros"));
 const Servicios = lazy(() => import("./components/Servicios"));
 const Contact = lazy(() => import("./components/Contact"));
-const Testimonios = lazy(() => import("./components/testimonios/testimonios"));
+const WhyUs = lazy(() => import("./components/testimonios/WhyUs")); // 👈 cambiado
 
 function App() {
   const heroRef = useRef(null);
   const nosotrosRef = useRef(null);
-  const testimoniosRef = useRef(null);
+  const whyUsRef = useRef(null); // 👈 cambiado
   const serviciosRef = useRef(null);
   const contactoRef = useRef(null);
 
-  const { ref: testimoniosInViewRef, inView: isTestimoniosInView } = useInView({
+  const { ref: whyUsInViewRef, inView: isWhyUsInView } = useInView({
     threshold: 0.2,
   });
   const { ref: serviciosInViewRef, inView: isServiciosInView } = useInView({
@@ -30,7 +30,7 @@ function App() {
     rootMargin: "-100px 0px",
   });
 
-  const shouldUseBlackText = isTestimoniosInView || isServiciosInView;
+  const shouldUseBlackText = isWhyUsInView || isServiciosInView;
   const shouldUseWhiteText = isContactoInView;
 
   return (
@@ -45,47 +45,56 @@ function App() {
         } transition-colors duration-500`}
       >
         <Navbar
-          refs={{ heroRef, nosotrosRef, testimoniosRef, serviciosRef, contactoRef }}
+          refs={{ heroRef, nosotrosRef, whyUsRef, serviciosRef, contactoRef }}
           isDarkSection={shouldUseBlackText && !shouldUseWhiteText}
         />
 
-        <section id="hero" ref={heroRef} className="min-h-screen bg-white">
+        {/* Hero */}
+        <section id="hero" ref={heroRef} className="min-h-screen bg-[#ECECEC]">
           <Hero />
         </section>
 
         <Suspense fallback={<div className="min-h-screen">Cargando...</div>}>
-          <section id="nosotros" ref={nosotrosRef} className="min-h-screen bg-white">
+          {/* Nosotros */}
+          <section
+            id="nosotros"
+            ref={nosotrosRef}
+            className="h-80vh bg-[#ECECEC]"
+          >
             <Nosotros />
           </section>
 
+          {/* WhyUs */}
           <section
-            id="testimonios"
+            id="whyus"
             ref={(el) => {
-              testimoniosRef.current = el;
-              testimoniosInViewRef(el);
+              whyUsRef.current = el;
+              whyUsInViewRef(el);
             }}
           >
-            <Testimonios />
+            <WhyUs />
           </section>
 
+          {/* Servicios */}
           <section
             id="servicios"
             ref={(el) => {
               serviciosRef.current = el;
               serviciosInViewRef(el);
             }}
-            className="min-h-screen bg-black"
+            className="min-h-screen bg-[#ECECEC]"
           >
             <Servicios />
           </section>
 
+          {/* Contacto */}
           <section
             id="contacto"
             ref={(el) => {
               contactoRef.current = el;
               contactoInViewRef(el);
             }}
-            className="min-h-screen bg-white"
+            className="min-h-screen bg-[#ECECEC]"
           >
             <Contact />
           </section>

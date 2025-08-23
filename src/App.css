@@ -8,3 +8,8 @@ html{
 body{
   font-family: 'Inter', sans-serif;
 }
+
+.force-rubik {
+  font-family: 'Rubik 80s Fade', cursive !important;
+  font-weight: normal !important;
+}

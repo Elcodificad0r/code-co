@@ -1,20 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { Helmet } from "react-helmet-async";
+
+// Lazy load de Spline
+const Spline = React.lazy(() => import("@splinetool/react-spline"));
 
 function Hero() {
   const [bgLoaded, setBgLoaded] = useState(false);
   const [useHeavyImage, setUseHeavyImage] = useState(true);
 
   useEffect(() => {
-    // Detecta tipo de red y decide si cargar imagen pesada
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const connection =
+      navigator.connection ||
+      navigator.mozConnection ||
+      navigator.webkitConnection;
     const slowTypes = ["slow-2g", "2g", "3g"];
     if (connection && slowTypes.includes(connection.effectiveType)) {
-      setUseHeavyImage(false); // no cargar fondo pesado
+      setUseHeavyImage(false);
     }
-
     const img = new Image();
-    img.src = useHeavyImage ? "/img/huasteca-hero.webp" : "/img/huasteca-hero-light.jpg";
+    img.src = useHeavyImage
+      ? "/img/hero-code.webp"
+      : "/img/hero-code-light.jpg";
     img.onload = () => {
       setBgLoaded(true);
     };
@@ -23,38 +29,46 @@ function Hero() {
   return (
     <>
       <Helmet>
-        <title>Escalada Consciente Monterrey | Aprende y Desafía la Gravedad</title>
+        <title>Landing Pages a Medida | Código Real, Rendimiento Real</title>
         <meta
           name="description"
-          content="Cursos de escalada en Monterrey para todos los niveles. Desarrolla tu técnica, mente y cuerpo mientras te conectas con la naturaleza."
+          content="Creamos landing pages rápidas, escalables y sin límites. Código real, rendimiento real."
         />
-        <meta property="og:title" content="Escalada Consciente Monterrey" />
+        <meta property="og:title" content="Landing Pages a Medida" />
         <meta
           property="og:description"
-          content="Desarrolla tus habilidades como escalador en montaña y crece en un entorno natural con nuestros programas personalizados."
+          content="Sitios web únicos, sin plantillas y sin límites. Desarrollados con código limpio y alto rendimiento."
         />
-        <meta property="og:image" content="/img/huasteca-hero.webp" />
+        <meta property="og:image" content="/img/hero-code.webp" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://lacasadepiedra.mx" />
-        <meta name="keywords" content="escalada, Monterrey, cursos de escalada, escalada deportiva, coaching de escalada, naturaleza, crecimiento personal, climbing, lead climb, cursos y programas de escalada Monterrey" />
-
-        {/* Preload solo si se va a usar la imagen pesada */}
+        <meta property="og:url" content="https://tusitio.com" />
         {useHeavyImage && (
-          <link rel="preload" as="image" href="/img/huasteca-hero.webp" />
+          <link rel="preload" as="image" href="/img/hero-code.webp" />
         )}
       </Helmet>
 
-      <div className="hero-section h-screen overflow-x-hidden relative">
-        {/* Imagen con <picture> adaptativa */}
+      <div className="hero-section h-screen overflow-x-hidden relative bg-lightBg">
+        {/* Background con Spline (Lazy load) */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none">
+          <Suspense fallback={null}>
+            <Spline scene="https://prod.spline.design/ynRlLABAAAV7NTz5/scene.splinecode" />
+          </Suspense>
+        </div>
+
+        {/* Imagen de fallback */}
         <picture>
           <source
-            srcSet="/img/huasteca-hero.webp"
+            srcSet="/img/hero-code.webp"
             type="image/webp"
             media="(min-width: 640px)"
           />
           <img
-            src={useHeavyImage ? "/img/huasteca-hero.webp" : "/img/huasteca-hero-light.jpg"}
-            alt="Escalada en la Huasteca"
+            src={
+              useHeavyImage
+                ? "/img/hero-code.webp"
+                : "/img/hero-code-light.jpg"
+            }
+            alt="Código y desarrollo web"
             className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out ${
               bgLoaded ? "opacity-100" : "opacity-0"
             }`}
@@ -64,10 +78,9 @@ function Hero() {
           />
         </picture>
 
-        {/* Placeholder en baja calidad */}
         {!bgLoaded && (
           <img
-            src="/img/huasteca-hero-lazy.jpg"
+            src="/img/hero-code-lazy.jpg"
             alt="Preload bajo"
             className="absolute inset-0 w-full h-full object-cover object-center blur-md"
             loading="lazy"
@@ -75,25 +88,34 @@ function Hero() {
         )}
 
         {/* Contenido */}
-        <div className="hero-wrapper relative z-10 flex flex-col justify-center h-full px-6 md:pl-25 bg-black/10">
-          <h1 className="hero-text text-center md:text-left w-full md:w-[70%] text-4xl md:text-8xl text-white font-black mt-10 md:mt-15 font-[Inter]">
-            Aprende, crece y desarrolla tus habilidades como escalador
+        <div className="hero-wrapper relative z-10 flex flex-col justify-center h-full px-6 md:pl-25 bg-lightBg/80 leading-none">
+          <h1 className="hero-text text-left md:text-center w-full md:w-[70%] text-4xl md:text-7xl text-black font-bold mt-10 md:mt-15 font-space leading-tight">
+            We don't template, <br />
+            we don't limit, <br />
+            <span className="force-rubik text-8xl">we code.</span>
           </h1>
 
-          <p className="hero-secondary-text text-center md:text-left text-base md:text-xl text-white font-normal mt-4 md:mt-1 font-[Inter]">
-            Conviértete en la mejor versión de ti mismo mientras desafías la gravedad.
+          <p className="text-left md:text-center text-base md:text-xl text-black font-normal mt-4 md:mt-1 font-space">
+            Sitios web rápidos, escalables y sin límites. Código real, rendimiento real.
           </p>
 
-          <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-8 w-full">
-            <a href="#testimonios">
-              <button className="bg-[#4834d4] w-[208px] px-6 py-3 rounded text-white text-sm sm:text-base animate-pulse text-center whitespace-nowrap mx-auto sm:mx-0">
-                Explora ahora
-              </button>
-            </a>
-            <a href="#servicios">
-              <button className="bg-[#6d5ddd] w-[208px] px-6 py-3 rounded text-white text-sm sm:text-base text-center whitespace-nowrap mx-auto sm:mx-0">
-                Nuestros paquetes
-              </button>
+          <div className="flex justify-end mt-8 w-full pr-4 md:pr-12">
+            <a href="#about" className="flex items-center gap-2 group">
+              <span className="text-black font-space text-lg">DESCUBRE MÁS</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-20 w-20 text-black group-hover:translate-x-5 group-hover:-translate-y-1 transition-transform duration-200 -rotate-45"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 17l8-8m0 0l-8-8m8 8H3"
+                />
+              </svg>
             </a>
           </div>
         </div>

@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "homepage": "https://lacasadepiedra.mx",
-  
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -15,14 +14,19 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@splinetool/react-spline": "^4.1.0",
     "@tailwindcss/vite": "^4.1.4",
     "animate.css": "^4.1.1",
     "firebase": "^11.6.1",
     "framer-motion": "^12.9.2",
+    "gsap": "^3.13.0",
+    "lucide-react": "^0.540.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
+    "react-icons": "^5.5.0",
     "react-intersection-observer": "^9.16.0",
+    "react-scroll": "^1.9.3",
     "sweetalert2": "^11.19.1",
     "sweetalert2-react-content": "^5.1.0",
     "tailwind-scrollbar-hide": "^2.0.0",
