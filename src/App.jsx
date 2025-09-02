@@ -7,24 +7,24 @@ import { useInView } from "react-intersection-observer";
 import { HelmetProvider } from "react-helmet-async";
 
 // Lazy loaded components
-const Nosotros = lazy(() => import("./components/Nosotros"));
+const Mision = lazy(() => import("./components/Mision"));
 const Servicios = lazy(() => import("./components/Servicios"));
-const Contact = lazy(() => import("./components/Contact"));
-const WhyUs = lazy(() => import("./components/testimonios/WhyUs"));
+const Precios = lazy(() => import("./components/Precios")); // antes Contact
+const Nosotros = lazy(() => import("./components/testimonios/Nosotros"));
 const Work = lazy(() => import("./components/Work"));
 const Faq = lazy(() => import("./components/Faq"));
-const ContactSection = lazy(() => import("./components/ContactSection"));
+const Contact = lazy(() => import("./components/Contact")); // antes ContactSection
 
 function App() {
   const heroRef = useRef(null);
+  const misionRef = useRef(null);
   const nosotrosRef = useRef(null);
-  const whyUsRef = useRef(null);
   const workRef = useRef(null);
   const serviciosRef = useRef(null);
   const contactoRef = useRef(null);
   const faqRef = useRef(null);
 
-  const { ref: whyUsInViewRef, inView: isWhyUsInView } = useInView({
+  const { ref: nosotrosInViewRef, inView: isWhyUsInView } = useInView({
     threshold: 0.2,
   });
   const { ref: workInViewRef, inView: isWorkInView } = useInView({
@@ -41,7 +41,8 @@ function App() {
     rootMargin: "-100px 0px",
   });
 
-  const shouldUseBlackText = isWhyUsInView || isWorkInView || isServiciosInView || isFaqInView;
+  const shouldUseBlackText =
+    isWhyUsInView || isWorkInView || isServiciosInView || isFaqInView;
   const shouldUseWhiteText = isContactoInView;
 
   return (
@@ -56,7 +57,15 @@ function App() {
         } transition-colors duration-500`}
       >
         <Navbar
-          refs={{ heroRef, nosotrosRef, whyUsRef, workRef, serviciosRef, contactoRef, faqRef }}
+          refs={{
+            heroRef,
+            misionRef,
+            nosotrosRef,
+            workRef,
+            serviciosRef,
+            contactoRef,
+            faqRef,
+          }}
           isDarkSection={shouldUseBlackText && !shouldUseWhiteText}
         />
 
@@ -66,24 +75,20 @@ function App() {
         </section>
 
         <Suspense fallback={<div className="min-h-screen">Cargando...</div>}>
+          {/* Misión */}
+          <section id="mision" ref={misionRef} className="h-80vh bg-[#ECECEC]">
+            <Mision />
+          </section>
+
           {/* Nosotros */}
           <section
             id="nosotros"
-            ref={nosotrosRef}
-            className="h-80vh bg-[#ECECEC]"
-          >
-            <Nosotros />
-          </section>
-
-          {/* WhyUs */}
-          <section
-            id="whyus"
             ref={(el) => {
-              whyUsRef.current = el;
-              whyUsInViewRef(el);
+              nosotrosRef.current = el;
+              nosotrosInViewRef(el);
             }}
           >
-            <WhyUs />
+            <Nosotros />
           </section>
 
           {/* Servicios */}
@@ -98,16 +103,12 @@ function App() {
             <Servicios />
           </section>
 
-          {/* Contacto */}
+          {/* Precios (antes Contact) */}
           <section
-            id="contacto"
-            ref={(el) => {
-              contactoRef.current = el;
-              contactoInViewRef(el);
-            }}
+            id="precios"
             className="min-h-screen bg-[#ECECEC]"
           >
-            <Contact />
+            <Precios />
           </section>
 
           {/* Work */}
@@ -134,14 +135,10 @@ function App() {
             <Faq />
           </section>
 
-          {/* ContactSection extra */}
-          <section
-            id="contactsection"
-            className="min-h-screen bg-gray-100"
-          >
-            <ContactSection />
+          {/* Contact (antes ContactSection) */}
+          <section id="contacto" ref={contactoRef} className="min-h-screen bg-gray-100">
+            <Contact />
           </section>
-
         </Suspense>
       </div>
     </HelmetProvider>

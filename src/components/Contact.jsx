@@ -1,213 +1,149 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
+import React, { useState, useEffect, useRef } from "react";
 
-export default function PricingSection() {
-  const containerRef = useRef(null);
-  const cardsRef = useRef([]);
-  const [hoveredIndex, setHoveredIndex] = useState(-1);
+const ContactSection = () => {
+  const sectionRef = useRef(null);
+  const titleRef = useRef(null);
+  const widgetRef = useRef(null);
+  const [gsapLoaded, setGsapLoaded] = useState(false);
 
-  const pricingData = [
-    {
-      letter: "C",
-      title: "DISEÑ*\nWEB.2",
-      description: "Creamos el concepto visual de tu sitio.",
-      features: [
-        "Prototipo wireframe navegable y mockups realistas.",
-        "Perfecto si quieres visualizar antes de construir."
-      ],
-      price: "$1,500 MXN"
-    },
-    {
-      letter: "O", 
-      title: "SITI* WEB.2\nBÁSICO",
-      description: "Presencia digital inmediata, sencilla y profesional.",
-      features: [
-        "✓ 3 secciones (Inicio, Servicios, Contacto)",
-        "✓ Hosting + SSL incluido",
-        "✓ Formulario de contacto básico"
-      ],
-      price: "$ 3,500 MXN"
-    },
-    {
-      letter: "D",
-      title: "SITI* WEB.2\nINTELIGENTE", 
-      description: "Haz que tu sitio hable y venda por ti.",
-      features: [
-        "✓ Más secciones",
-        "✓ Agente con inteligencia artificial",
-        "✓ Hosting + Dominio + SSL",
-        "✓ Contacto directo por correo",
-        "Automatiza tu comunicación y gana tiempo."
-      ],
-      price: "$ 6,999 MXN"
-    },
-    {
-      letter: "E",
-      title: "SITI* WEB.2\nALTAMENTE\nPERSONALIZADO",
-      description: "Tu sitio con diseño premium y funciones avanzadas.",
-      features: [
-        "✓ Incluye todo lo anterior",
-        "✓ Elementos 3D interactivos", 
-        "✓ Ingreso de usuarios con Google Auth",
-        "✓ Agentes de IA personalizados",
-        "✓ Animaciones, dashboards y más"
-      ],
-      price: "$20,000 MXN"
-    }
-  ];
-
+  // GSAP loader
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Initial setup for cards
-      gsap.set('.pricing-card', {
-        opacity: 0,
-        y: 100,
-        scale: 0.9
-      });
-
-      // Initial setup for letters with rotation
-      gsap.set('.pricing-letter', {
-        rotation: -10,
-        opacity: 0.5
-      });
-
-      // Animate cards in with stagger
-      gsap.to('.pricing-card', {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 1.2,
-        stagger: 0.15,
-        ease: "power3.out",
-        delay: 0.3
-      });
-
-      // Animate letters with rotation effect
-      gsap.to('.pricing-letter', {
-        rotation: 0,
-        opacity: 1,
-        duration: 1.5,
-        stagger: 0.1,
-        ease: "elastic.out(1, 0.5)",
-        delay: 0.8
-      });
-
-
-    }, containerRef);
-
-    return () => ctx.revert();
+    if (typeof window !== "undefined") {
+      if (!window.gsap) {
+        const script = document.createElement("script");
+        script.src =
+          "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js";
+        script.onload = () => setGsapLoaded(true);
+        document.head.appendChild(script);
+      } else setGsapLoaded(true);
+    }
   }, []);
 
-  const handleMouseEnter = (index) => {
-    setHoveredIndex(index);
-      
-    cardsRef.current.forEach((card, i) => {
-      if (!card) return;
-      
-      const distance = Math.abs(index - i);
-      let scale = 1;
-      
-      if (i === index) {
-        scale = 1.05;
-      } else if (distance === 1) {
-        scale = 0.95;
-      } else if (distance === 2) {
-        scale = 0.9;
-      } else {
-        scale = 0.85;
+  // GSAP animations
+  useEffect(() => {
+    if (gsapLoaded && window.gsap) {
+      const gsap = window.gsap;
+      if (titleRef.current) {
+        gsap.fromTo(
+          titleRef.current,
+          { y: 80, opacity: 0, skewY: 2 },
+          { y: 0, opacity: 1, skewY: 0, duration: 1.2, ease: "power3.out", delay: 0.3 }
+        );
       }
-      
-      gsap.to(card, {
-        scale: scale,
-        duration: 0.6,
-        ease: "power3.out"
-      });
-    });
-  };
 
-  const handleMouseLeave = () => {
-    setHoveredIndex(-1);
-      
-    cardsRef.current.forEach((card) => {
-      if (!card) return;
-      
-      gsap.to(card, {
-        scale: 1,
-        duration: 0.6,
-        ease: "power3.out"
-      });
-    });
-  };
+      if (widgetRef.current) {
+        gsap.fromTo(
+          widgetRef.current,
+          { y: 50, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.5 }
+        );
+      }
+    }
+  }, [gsapLoaded]);
+
+  // Load Calendly script and initialize widget
+  useEffect(() => {
+    if (typeof window !== "undefined" && widgetRef.current) {
+      const existingScript = document.querySelector('script[src*="calendly"]');
+      if (!existingScript) {
+        const script = document.createElement("script");
+        script.src = "https://assets.calendly.com/assets/external/widget.js";
+        script.async = true;
+        script.onload = () => {
+          if (window.Calendly && widgetRef.current) {
+            window.Calendly.initInlineWidget({ 
+              url: "https://calendly.com/guido-gueta/30min", 
+              parentElement: widgetRef.current 
+            });
+          }
+        };
+        document.body.appendChild(script);
+      } else if (window.Calendly && widgetRef.current) {
+        window.Calendly.initInlineWidget({ 
+          url: "https://calendly.com/guido-gueta/30min", 
+          parentElement: widgetRef.current 
+        });
+      }
+    }
+  }, []);
 
   return (
-    <section ref={containerRef} className="bg-[#ECECEC] py-16 px-8 sm:px-16">
-      {/* Pricing Cards */}
-      <div className="flex flex-row gap-4 justify-center items-stretch max-w-7xl mx-auto mb-12 flex-wrap md:flex-nowrap">
-        {pricingData.map((item, index) => (
-          <div
-            key={index}
-            ref={el => cardsRef.current[index] = el}
-            className="pricing-card bg-white border-2 border-black p-8 flex-1 min-h-[600px] flex flex-col justify-between transform-gpu w-full md:w-1/4 hover:cursor-pointer"
-            onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={handleMouseLeave}
-          >
-            {/* Letter */}
-            <div className="pricing-letter text-[200px] font-rubik80s text-black mb-0 pb-0">
-              {item.letter}
+    <section
+      ref={sectionRef}
+      className="bg-[#ECECEC] py-16 px-4 md:px-6 relative overflow-visible"
+    >
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:!grid-cols-2 gap-12 lg:!gap-16 items-center lg:!items-start justify-items-center lg:!justify-items-start text-center lg:!text-left">
+          
+          {/* Left Content */}
+          <div className="space-y-8 w-full max-w-lg lg:!max-w-none">
+            <div ref={titleRef} className="space-y-4">
+              <h1 className="font-rubik80s text-5xl md:text-7xl lg:!text-8xl text-gray-900 leading-none">
+                Hablemos
+                <span className=" text-blue-600 mt-2"> de tu</span>
+                <span className=" text-gray-900 mt-2"> proyecto*</span>
+              </h1>
+              <p className="font-space text-gray-600 text-lg md:text-xl max-w-lg mx-auto lg:!mx-0 lg:!max-w-lg">
+                *Sin compromisos, solo una conversación honesta sobre lo que necesitas
+              </p>
             </div>
-            
-            {/* Title */}
-            <div className="mb-6">
-              <h3 className="text-xl sm:text-2xl font-bold font-space leading-tight whitespace-pre-line text-black">
-                {item.title}
-              </h3>
-            </div>
-            
-            {/* Description */}
-            <p className="text-sm font-space mb-6 text-gray-700">
-              {item.description}
-            </p>
-            
-            {/* Features */}
-            <div className="flex-grow mb-8">
-              <ul className="space-y-2 text-sm font-space">
-                {item.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="text-gray-700">
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            {/* Price and Button */}
-            <div className="mt-auto">
-              <div className="text-xs font-space text-gray-500 mb-2">DESDE</div>
-              <div className="text-2xl sm:text-3xl font-bold font-space text-black mb-4">
-                {item.price}
+
+            <div className="space-y-6">
+              <div className="font-space text-gray-700">
+                <h3 className="font-bold text-lg mb-3">¿Qué incluye la llamada?</h3>
+                <ul className="space-y-2 text-base text-left max-w-md mx-auto lg:!mx-0 lg:!max-w-none">
+                  <li className="flex items-start space-x-3"><span className="text-blue-600 font-bold">01</span><span>Análisis de tu proyecto actual</span></li>
+                  <li className="flex items-start space-x-3"><span className="text-blue-600 font-bold">02</span><span>Propuesta de solución técnica</span></li>
+                  <li className="flex items-start space-x-3"><span className="text-blue-600 font-bold">03</span><span>Timeline y presupuesto aproximado</span></li>
+                </ul>
               </div>
-              <button className="w-full bg-black text-white py-3 px-6 font-bold font-space text-sm tracking-wider hover:bg-gray-800 transition-all duration-300 border-2 border-black hover:scale-105 transform">
-                COTIZAR
-              </button>
+
+              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/40 max-w-md mx-auto lg:!mx-0 lg:!max-w-none">
+                <p className="font-space text-sm text-gray-600 italic text-left">
+                  "En 30 minutos puedes saber exactamente qué necesitas para llevar tu idea al siguiente nivel"
+                </p>
+                <p className="font-space text-xs text-gray-500 mt-2 text-left">— Code&Co. Team</p>
+              </div>
             </div>
           </div>
-        ))}
-      </div>
-      
-      {/* Additional Services */}
-      <div className="max-w-4xl mx-auto text-center mb-8">
-        <h4 className="text-xl font-bold font-space text-black mb-4">Servicios adicionales</h4>
-        <p className="text-sm font-space text-gray-700 leading-relaxed">
-          Puedes contratar cualquier servicio por separado: agente de inteligencia artificial, bot automatizado para WhatsApp, dominio 
-          .com, hosting seguro, certificado SSL, integración de contacto por email, diseño visual personalizado del sitio.
-        </p>
-      </div>
-      
-      {/* Quote Button */}
-      <div className="text-center">
-        <button className="bg-black text-white px-12 py-4 font-bold font-space text-lg tracking-wider hover:bg-gray-800 transition-colors duration-300 border-2 border-black hover:scale-105 transform transition-transform">
-          COTIZAR
-        </button>
+
+          {/* Right Content - Calendly Widget */}
+          <div className="lg:!pl-8 w-full max-w-md mx-auto lg:!mx-0 lg:!max-w-none">
+            <div className="relative">
+              <div className="absolute -inset-4 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-3xl blur-xl"></div>
+              <div className="relative overflow-hidden rounded-3xl" style={{ height: "600px", maxHeight: "600px" }}>
+                <div
+                  ref={widgetRef}
+                  className="relative w-full h-full"
+                  style={{ minHeight: "500px" }}
+                ></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="mt-12 text-center space-y-4">
+          <p className="font-space text-gray-600">¿Prefieres escribirnos directamente?</p>
+          <button className="font-space text-white bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 rounded-full hover:from-purple-600 hover:to-blue-600 transition-all duration-500 transform hover:scale-105">
+            ENVIAR EMAIL →
+          </button>
+        </div>
+
+        {/* Footer transparente */}
+        <footer className="mt-12 w-full bg-white/10 backdrop-blur-sm rounded-xl py-6 px-4 md:px-8 text-black font-space">
+  <div className="flex flex-col items-center text-center 
+                  md:!flex-row md:!justify-between md:!items-center 
+                  space-y-2 md:!space-y-0 w-full">
+    <span className="w-auto text-xs">Code&Co. Monterrey N.L.</span>
+    <span className="w-auto text-xs">権利が留保されています / 2024年以降</span>
+    <span className="w-auto text-xs">we build, we create, we code.</span>
+  </div>
+</footer>
       </div>
     </section>
   );
-}
+};
+
+export default ContactSection;

@@ -176,9 +176,9 @@ const Faq = () => {
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="mb-16 text-center">
-          <h2 ref={titleRef} className="font-rubik80s text-4xl md:text-6xl lg:text-7xl font-black text-gray-900 mb-6 leading-none">
+          <h2 ref={titleRef} className="font-rubik80s text-6xl md:text-6xl lg:text-9xl font text-gray-900 mb-6 leading-none">
             PREGUNTAS
-            <span className="block text-blue-600 mt-2 text-5xl md:text-7xl lg:text-8xl">FRECUENTES*</span>
+            <span className="block text-blue-600 mt-2 text-5xl md:text-7xl lg:text11xl">FRECUENTES*</span>
           </h2>
           <p className="font-space text-gray-600 text-lg md:text-xl max-w-2xl mx-auto">*O no tan frecuentes, pero importantes para ti</p>
         </div>

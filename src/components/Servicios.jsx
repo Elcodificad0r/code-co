@@ -214,7 +214,7 @@ export default function ServicesHero() {
     <section ref={containerRef} className="relative bg-[#ECECEC] min-h-screen overflow-hidden py-16">
       
       {/* Top section with 4 divs in row */}
-      <div ref={topSectionRef} className="flex flex-row justify-between items-start px-8 md:px-16 mb-20">
+      <div ref={topSectionRef} className="flex flex-row flex-wrap justify-between items-start px-8 md:px-16 mb-20">
         
         {/* Div 1: Week info - Left with glitch effect */}
         <div className="animate-section flex-shrink-0">

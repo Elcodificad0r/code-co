@@ -9,11 +9,10 @@ const Navbar = () => {
   const navItems = [
     { id: "home", label: "HOME" },
     { id: "mision", label: "MISIÓN" },
-    { id: "porque", label: "¿POR QUÉ NOSOTROS?" },
+    { id: "nosotros", label: "NOSOTROS" },
     { id: "servicios", label: "SERVICIOS" },
     { id: "precios", label: "PRECIOS" },
     { id: "work", label: "WORK" },
-    { id: "proceso", label: "PROCESO" },
     { id: "faq", label: "FAQ" },
     { id: "contacto", label: "CONTACTO" },
   ];
@@ -52,7 +51,7 @@ const Navbar = () => {
         </div>
 
         {/* Menú desktop: 3 columnas */}
-        <div className="md:flex flex-1 justify-center">
+        <div className="hidden md:!flex flex-1 justify-center">
           <div className="grid grid-cols-3 gap-x-16 gap-y-3 text-left">
             <div className="flex flex-col gap-3">
               {col1.map((item) => (
@@ -72,8 +71,8 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Redes sociales (desktop) */}
-        <div className=" md:flex items-center space-x-4">
+        {/* Redes sociales (solo desktop) */}
+        <div className="hidden md:!flex items-center space-x-4">
           <a
             href="https://www.instagram.com"
             target="_blank"
@@ -97,7 +96,7 @@ const Navbar = () => {
         {/* Botón hamburguesa (solo mobile) */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-[#0A0F0D]"
+          className="md:!hidden text-[#0A0F0D]"
           aria-label="Menu"
         >
           {isOpen ? <X size={28} /> : <Menu size={28} />}
@@ -106,9 +105,9 @@ const Navbar = () => {
 
       {/* Menú Mobile */}
       {isOpen && (
-        <div className="md:hidden bg-white px-6 pb-6 shadow-md">
-          <div className="flex flex-col gap-4">
-            {navItems.map((item) => (
+        <div className="md:!hidden bg-white px-6 pb-6 shadow-md transition-all duration-300 ease-in-out animate-slideDown">
+          <div className="flex flex-col items-center text-center gap-4">
+            {navItems.map((item, index) => (
               <Link
                 key={item.id}
                 to={item.id}
@@ -118,10 +117,12 @@ const Navbar = () => {
                 offset={-70}
                 activeClass="is-active"
                 onClick={() => setIsOpen(false)}
-                className="
+                className={`
                   cursor-pointer text-[#0A0F0D] text-base tracking-wide font-space uppercase
                   opacity-50 hover:opacity-100 transition [&.is-active]:opacity-100
-                "
+                  ${index === 0 ? "pt-3" : ""} 
+                  pb-2 border-b border-gray-200 last:border-none w-full
+                `}
               >
                 {item.label}
               </Link>
@@ -129,7 +130,7 @@ const Navbar = () => {
           </div>
 
           {/* Redes sociales en mobile */}
-          <div className="flex space-x-4 mt-4">
+          <div className="flex justify-center space-x-6 mt-6">
             <a
               href="https://www.instagram.com"
               target="_blank"
@@ -137,7 +138,7 @@ const Navbar = () => {
               className="text-[#0A0F0D] opacity-50 hover:opacity-100 transition"
               aria-label="Instagram"
             >
-              <Instagram className="w-5 h-5" />
+              <Instagram className="w-6 h-6" />
             </a>
             <a
               href="https://www.linkedin.com"
@@ -146,7 +147,7 @@ const Navbar = () => {
               className="text-[#0A0F0D] opacity-50 hover:opacity-100 transition"
               aria-label="LinkedIn"
             >
-              <Linkedin className="w-5 h-5" />
+              <Linkedin className="w-6 h-6" />
             </a>
           </div>
         </div>
