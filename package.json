@@ -1,9 +1,9 @@
 {
-  "name": "cdpsite",
+  "name": "codeandco",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://lacasadepiedra.mx",
+"homepage": "https://Elcodificad0r.github.io/code-co",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
