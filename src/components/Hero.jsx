@@ -7,6 +7,7 @@ const Spline = React.lazy(() => import("@splinetool/react-spline"));
 function Hero() {
   const [bgLoaded, setBgLoaded] = useState(false);
   const [useHeavyImage, setUseHeavyImage] = useState(true);
+  const [splineLoaded, setSplineLoaded] = useState(false);
 
   useEffect(() => {
     const connection =
@@ -48,15 +49,28 @@ function Hero() {
       </Helmet>
 
       <div className="hero-section h-screen overflow-x-hidden relative bg-lightBg">
-        {/* Background con Spline (Lazy load) */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none">
+        {/* Fallback low-res mientras carga el Spline */}
+        {!splineLoaded && (
+          <img
+            src="/img/lowresherospline.jpg"
+            alt="Hero lowres background"
+            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+            loading="eager"
+          />
+        )}
+
+        {/* Background con Spline (Interactive) */}
+        <div className="absolute inset-0 w-full h-full">
           <Suspense fallback={null}>
-            <Spline scene="https://prod.spline.design/ynRlLABAAAV7NTz5/scene.splinecode" />
+            <Spline
+              scene="https://prod.spline.design/ynRlLABAAAV7NTz5/scene.splinecode"
+              onLoad={() => setSplineLoaded(true)}
+            />
           </Suspense>
         </div>
 
-        {/* Imagen de fallback */}
-        <picture>
+        {/* Imagen de fallback extra con blur mientras carga la heavy */}
+        <picture className="pointer-events-none">
           <source
             srcSet="/img/hero-code.webp"
             type="image/webp"
@@ -82,25 +96,28 @@ function Hero() {
           <img
             src="/img/hero-code-lazy.jpg"
             alt="Preload bajo"
-            className="absolute inset-0 w-full h-full object-cover object-center blur-md"
+            className="absolute inset-0 w-full h-full object-cover object-center blur-md pointer-events-none"
             loading="lazy"
           />
         )}
 
         {/* Contenido */}
-        <div className="hero-wrapper relative z-10 flex flex-col justify-center h-full px-6 md:pl-25 bg-lightBg/80 leading-none">
-          <h1 className="hero-text text-left md:text-center w-full md:w-[70%] text-4xl md:text-7xl text-black font-bold mt-10 md:mt-15 font-space leading-tight">
+        <div className="hero-wrapper relative z-10 flex flex-col justify-center h-full px-6 md:pl-25 bg-lightBg/80 leading-none pointer-events-none">
+          <h1 className="hero-text text-left md:text-center w-full md:w-[70%] text-4xl md:text-7xl text-black font-bold mt-10 md:mt-15 font-space leading-tight pointer-events-none">
             We don't template, <br />
             we don't limit, <br />
             <span className="force-rubik text-8xl">we code.</span>
           </h1>
 
-          <p className="text-left md:text-center text-base md:text-xl text-black font-normal mt-4 md:mt-1 font-space">
+          <p className="text-left md:text-center text-base md:text-xl text-black font-normal mt-4 md:mt-1 font-space pointer-events-none">
             Sitios web rápidos, escalables y sin límites. Código real, rendimiento real.
           </p>
 
-          <div className="flex justify-end mt-8 w-full pr-4 md:pr-12">
-            <a href="#about" className="flex items-center gap-2 group">
+          <div className="flex justify-end mt-8 w-full pr-4 md:pr-12 pointer-events-none">
+            <a
+              href="#precios"
+              className="flex items-center gap-2 group pointer-events-auto"
+            >
               <span className="text-black font-space text-lg">DESCUBRE MÁS</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
