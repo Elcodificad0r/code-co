@@ -230,7 +230,7 @@ export default function ServicesHero() {
           <div className="relative">
             <img 
               ref={eyeRef}
-              src="/img/ojoservicios.png" 
+              src="img/ojoservicios.png" 
               alt="Eye service" 
               className="w-48 md:w-64 h-auto grayscale transition-opacity duration-300"
             />
@@ -268,7 +268,7 @@ export default function ServicesHero() {
           {/* Barcode with parallax effect */}
           <img 
             ref={barcodeRef}
-            src="/img/codigoservicios.png" 
+            src="img/codigoservicios.png" 
             alt="Barcode" 
             className="w-24 h-auto opacity-60 mb-4 transition-transform duration-300"
           />
