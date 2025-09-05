@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Register GSAP plugins
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ServicesHero() {
@@ -16,7 +16,7 @@ export default function ServicesHero() {
   const [currentWeek, setCurrentWeek] = useState('');
   const [currentYear, setCurrentYear] = useState('');
 
-  // Get current week and year
+ 
   useEffect(() => {
     const now = new Date();
     const start = new Date(now.getFullYear(), 0, 0);
@@ -31,26 +31,26 @@ export default function ServicesHero() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Initial setup for main text
+    
       gsap.set(mainTextRef.current, {
         opacity: 0,
         y: 100,
         scale: 0.8
       });
 
-      // Initial setup for top sections with stagger
+     
       gsap.set('.animate-section', {
         opacity: 0,
         y: 50
       });
 
-      // Initial setup for services text
+    
       gsap.set('.service-item', {
         opacity: 0,
         x: -30
       });
 
-      // Animate top sections first
+   
       gsap.to('.animate-section', {
         opacity: 1,
         y: 0,
@@ -63,7 +63,7 @@ export default function ServicesHero() {
         }
       });
 
-      // Glitch effect for week numbers
+      
       const glitchTl = gsap.timeline({ repeat: -1, repeatDelay: 3 });
       glitchTl
         .to(weekRef.current, {
@@ -93,7 +93,7 @@ export default function ServicesHero() {
           ease: "power4.inOut"
         });
 
-      // Eye fade in/out effect with scroll
+      
       ScrollTrigger.create({
         trigger: eyeRef.current,
         start: "top 80%",
@@ -109,7 +109,7 @@ export default function ServicesHero() {
         }
       });
 
-      // Barcode parallax effect
+      
       ScrollTrigger.create({
         trigger: barcodeRef.current,
         start: "top bottom",
@@ -125,7 +125,7 @@ export default function ServicesHero() {
         }
       });
 
-      // Services text staggered fade in after arrow
+      
       gsap.to('.service-item', {
         opacity: 1,
         x: 0,
@@ -139,7 +139,7 @@ export default function ServicesHero() {
         }
       });
 
-      // Main text entrance animation with scale
+  
       gsap.to(mainTextRef.current, {
         opacity: 1,
         y: 0,
@@ -153,7 +153,7 @@ export default function ServicesHero() {
         }
       });
 
-      // Text change animation based on scroll with enhanced effects
+      
       ScrollTrigger.create({
         trigger: mainTextRef.current,
         start: "top 60%",
@@ -163,7 +163,7 @@ export default function ServicesHero() {
           const progress = self.progress;
           
           if (progress < 0.09) {
-            // Show DISEÑ*
+            
             if (mainTextRef.current) {
               mainTextRef.current.innerHTML = `
                 <div class="text-8xl md:text-9xl lg:text-[12rem] leading-none tracking-tight">
@@ -174,7 +174,7 @@ export default function ServicesHero() {
               `;
             }
           } else if (progress < 0.26) {
-            // Show SITI*S
+           
             if (mainTextRef.current) {
               mainTextRef.current.innerHTML = `
                 <div class="text-8xl md:text-9xl lg:text-[12rem] leading-none tracking-tight">
@@ -185,7 +185,7 @@ export default function ServicesHero() {
               `;
             }
           } else {
-            // Show SEO*
+          
             if (mainTextRef.current) {
               mainTextRef.current.innerHTML = `
                 <div class="text-8xl md:text-9xl lg:text-[12rem] leading-none tracking-tight">
@@ -197,7 +197,7 @@ export default function ServicesHero() {
             }
           }
 
-          // Add text pulsing effect
+         
           gsap.to(mainTextRef.current, {
             scale: 1 + (Math.sin(progress * Math.PI * 4) * 0.02),
             duration: 0.1
@@ -213,10 +213,10 @@ export default function ServicesHero() {
   return (
     <section ref={containerRef} className="relative bg-[#ECECEC] min-h-screen overflow-hidden py-16">
       
-      {/* Top section with 4 divs in row */}
+     
       <div ref={topSectionRef} className="flex flex-row flex-wrap justify-between items-start px-8 md:px-16 mb-20">
         
-        {/* Div 1: Week info - Left with glitch effect */}
+       
         <div className="animate-section flex-shrink-0">
           <div ref={weekRef} className="text-gray-600 text-sm tracking-wider">
             <div className="font-bold">WE</div>
@@ -225,7 +225,7 @@ export default function ServicesHero() {
           </div>
         </div>
 
-        {/* Div 2: Eye image - Center Left with fade effect */}
+     
         <div className="animate-section flex-shrink-0 mx-8">
           <div className="relative">
             <img 
@@ -238,15 +238,15 @@ export default function ServicesHero() {
           </div>
         </div>
 
-        {/* Div 3: Year and services info - Center Right */}
+       
         <div className="animate-section flex-shrink-0 mx-8">
-          {/* Year */}
+        
           <div 
             className="text-gray-600 text-sm tracking-wider font-light leading-tight mb-6"
             dangerouslySetInnerHTML={{ __html: currentYear }}
           />
           
-          {/* Services info with staggered animations */}
+         
           <div ref={servicesTextRef} className="space-y-3 text-gray-700 max-w-xs text-sm">
             <div className="service-item font-regular">
               <strong className="text-black">Landing Page →</strong> Sitios rápidos y efectivos.
@@ -263,9 +263,8 @@ export default function ServicesHero() {
           </div>
         </div>
 
-        {/* Div 4: Barcode and arrow - Right with parallax */}
         <div className="animate-section flex-shrink-0 flex flex-col items-center">
-          {/* Barcode with parallax effect */}
+        
           <img 
             ref={barcodeRef}
             src="img/codigoservicios.png" 
@@ -273,7 +272,7 @@ export default function ServicesHero() {
             className="w-24 h-auto opacity-60 mb-4 transition-transform duration-300"
           />
           
-          {/* Arrow */}
+        
           <svg 
             className="w-8 h-8 text-gray-600 animate-bounce" 
             fill="currentColor" 
@@ -284,13 +283,13 @@ export default function ServicesHero() {
         </div>
       </div>
 
-      {/* Bottom section - Large text with enhanced presence */}
+      
       <div className="flex justify-center items-center px-8 md:px-16">
         <div 
           ref={mainTextRef}
           className="text-center"
         >
-          {/* Initial content - will be replaced by GSAP */}
+         
           <div className="text-8xl md:text-9xl lg:text-[24rem] leading-none tracking-tight">
             <span className="font-bold font-space text-black">DISEÑ</span>
             <span className="font-bold font-rubik80s text-red-500">*</span>
@@ -300,7 +299,7 @@ export default function ServicesHero() {
         </div>
       </div>
 
-      {/* Background decorative asterisk with subtle animation */}
+     
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none -z-10">
         <div className="text-gray-200 text-[400px] md:text-[600px] lg:text-[800px] leading-none opacity-10 animate-pulse">
           *

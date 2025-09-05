@@ -71,7 +71,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Redes sociales (solo desktop) */}
+       
         <div className="hidden md:!flex items-center space-x-4">
           <a
             href="https://www.instagram.com"
@@ -93,7 +93,7 @@ const Navbar = () => {
           </a>
         </div>
 
-        {/* Botón hamburguesa (solo mobile) */}
+        
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="md:!hidden text-[#0A0F0D]"
@@ -103,7 +103,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Menú Mobile */}
+     
       {isOpen && (
         <div className="md:!hidden bg-white px-6 pb-6 shadow-md transition-all duration-300 ease-in-out animate-slideDown">
           <div className="flex flex-col items-center text-center gap-4">
@@ -129,7 +129,7 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Redes sociales en mobile */}
+         
           <div className="flex justify-center space-x-6 mt-6">
             <a
               href="https://www.instagram.com"

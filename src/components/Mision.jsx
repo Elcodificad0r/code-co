@@ -6,10 +6,10 @@ export default function Mision() {
   CÓDIG* REAL
 </h1>
 
-      {/* Contenido principal */}
+      
       <div className="relative flex flex-col md:!flex-row w-full gap-10 items-center">
         
-        {/* Imagen */}
+       
         <div className="md:!w-1/2 h-[300px] md:!h-[500px] flex items-center justify-start md:!justify-start md:!pl-5">
           <img 
             src="img/FOTONOSOTROS.png" 
@@ -18,7 +18,7 @@ export default function Mision() {
           />
         </div>
 
-        {/* Texto */}
+       
         <div className="w-full md:!w-1/2 flex flex-col gap-6 px-4 md:!px-0 text-center md:!text-left pt-10 md:!pt-0">
           <p className="text-sm font-space text-[#0A0F0D]">
             Diseño + programación + SEO.

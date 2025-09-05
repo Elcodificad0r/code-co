@@ -6,7 +6,7 @@ const ContactSection = () => {
   const widgetRef = useRef(null);
   const [gsapLoaded, setGsapLoaded] = useState(false);
 
-  // GSAP loader
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (!window.gsap) {
@@ -19,7 +19,7 @@ const ContactSection = () => {
     }
   }, []);
 
-  // GSAP animations
+  
   useEffect(() => {
     if (gsapLoaded && window.gsap) {
       const gsap = window.gsap;
@@ -41,7 +41,7 @@ const ContactSection = () => {
     }
   }, [gsapLoaded]);
 
-  // Load Calendly script and initialize widget
+  
   useEffect(() => {
     if (typeof window !== "undefined" && widgetRef.current) {
       const existingScript = document.querySelector('script[src*="calendly"]');
@@ -75,7 +75,7 @@ const ContactSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:!grid-cols-2 gap-12 lg:!gap-16 items-center lg:!items-start justify-items-center lg:!justify-items-start text-center lg:!text-left">
           
-          {/* Left Content */}
+         
           <div className="space-y-8 w-full max-w-lg lg:!max-w-none">
             <div ref={titleRef} className="space-y-4">
               <h1 className="font-rubik80s text-5xl md:text-7xl lg:!text-8xl text-gray-900 leading-none">
@@ -107,7 +107,7 @@ const ContactSection = () => {
             </div>
           </div>
 
-          {/* Right Content - Calendly Widget */}
+          
           <div className="lg:!pl-8 w-full max-w-md mx-auto lg:!mx-0 lg:!max-w-none">
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-3xl blur-xl"></div>
@@ -123,7 +123,7 @@ const ContactSection = () => {
 
         </div>
 
-        {/* Bottom CTA */}
+       
         <div className="mt-12 text-center space-y-4">
           <p className="font-space text-gray-600">¿Prefieres escribirnos directamente?</p>
           <button className="font-space text-white bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 rounded-full hover:from-purple-600 hover:to-blue-600 transition-all duration-500 transform hover:scale-105">
@@ -131,7 +131,7 @@ const ContactSection = () => {
           </button>
         </div>
 
-        {/* Footer transparente */}
+      
         <footer className="mt-12 w-full bg-white/10 backdrop-blur-sm rounded-xl py-6 px-4 md:px-8 text-black font-space">
   <div className="flex flex-col items-center text-center 
                   md:!flex-row md:!justify-between md:!items-center 

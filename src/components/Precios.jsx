@@ -58,20 +58,20 @@ export default function PricingSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Initial setup for cards
+
       gsap.set('.pricing-card', {
         opacity: 0,
         y: 100,
         scale: 0.9
       });
 
-      // Initial setup for letters with rotation
+     
       gsap.set('.pricing-letter', {
         rotation: -10,
         opacity: 0.5
       });
 
-      // Animate cards in with stagger
+    
       gsap.to('.pricing-card', {
         opacity: 1,
         y: 0,
@@ -82,7 +82,7 @@ export default function PricingSection() {
         delay: 0.3
       });
 
-      // Animate letters with rotation effect
+      
       gsap.to('.pricing-letter', {
         rotation: 0,
         opacity: 1,
@@ -141,7 +141,7 @@ export default function PricingSection() {
 
   return (
     <section ref={containerRef} className="bg-[#ECECEC] py-16 px-8 sm:px-16">
-      {/* Pricing Cards */}
+      
       <div className="flex flex-row gap-4 justify-center items-stretch max-w-7xl mx-auto mb-12 flex-wrap md:flex-nowrap">
         {pricingData.map((item, index) => (
           <div
@@ -151,24 +151,24 @@ export default function PricingSection() {
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
           >
-            {/* Letter */}
+            
             <div className="pricing-letter text-[200px] font-rubik80s text-black mb-0 pb-0">
               {item.letter}
             </div>
             
-            {/* Title */}
+          
             <div className="mb-6">
               <h3 className="text-xl sm:text-2xl font-bold font-space leading-tight whitespace-pre-line text-black">
                 {item.title}
               </h3>
             </div>
             
-            {/* Description */}
+           
             <p className="text-sm font-space mb-6 text-gray-700">
               {item.description}
             </p>
             
-            {/* Features */}
+           
             <div className="flex-grow mb-8">
               <ul className="space-y-2 text-sm font-space">
                 {item.features.map((feature, featureIndex) => (
@@ -179,7 +179,7 @@ export default function PricingSection() {
               </ul>
             </div>
             
-            {/* Price and Button */}
+            
             <div className="mt-auto">
               <div className="text-xs font-space text-gray-500 mb-2">DESDE</div>
               <div className="text-2xl sm:text-3xl font-bold font-space text-black mb-4">
@@ -193,7 +193,7 @@ export default function PricingSection() {
         ))}
       </div>
       
-      {/* Additional Services */}
+  
       <div className="max-w-4xl mx-auto text-center mb-8">
         <h4 className="text-xl font-bold font-space text-black mb-4">Servicios adicionales</h4>
         <p className="text-sm font-space text-gray-700 leading-relaxed">
@@ -202,7 +202,7 @@ export default function PricingSection() {
         </p>
       </div>
       
-      {/* Quote Button */}
+     
       <div className="text-center">
         <button className="bg-black text-white px-12 py-4 font-bold font-space text-lg tracking-wider hover:bg-gray-800 transition-colors duration-300 border-2 border-black hover:scale-105 transform transition-transform">
           COTIZAR

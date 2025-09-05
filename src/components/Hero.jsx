@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { Helmet } from "react-helmet-async";
 
-// Lazy load de Spline
+// Lazy shit
 const Spline = React.lazy(() => import("@splinetool/react-spline"));
 
 function Hero() {
@@ -20,8 +20,8 @@ function Hero() {
     }
     const img = new Image();
     img.src = useHeavyImage
-      ? "/img/hero-code.webp"
-      : "/img/hero-code-light.jpg";
+      ? "img/hero-code.webp"
+      : "img/hero-code-light.jpg";
     img.onload = () => {
       setBgLoaded(true);
     };
@@ -49,17 +49,17 @@ function Hero() {
       </Helmet>
 
       <div className="hero-section h-screen overflow-x-hidden relative bg-lightBg">
-        {/* Fallback low-res mientras carga el Spline */}
+        
         {!splineLoaded && (
           <img
-            src="/img/lowresherospline.jpg"
+            src="img/lowresherospline.jpg"
             alt="Hero lowres background"
             className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
             loading="eager"
           />
         )}
 
-        {/* Background con Spline (Interactive) */}
+        
         <div className="absolute inset-0 w-full h-full">
           <Suspense fallback={null}>
             <Spline
@@ -69,10 +69,10 @@ function Hero() {
           </Suspense>
         </div>
 
-        {/* Imagen de fallback extra con blur mientras carga la heavy */}
+        
         <picture className="pointer-events-none">
           <source
-            srcSet="/img/hero-code.webp"
+            srcSet="img/hero-code.webp"
             type="image/webp"
             media="(min-width: 640px)"
           />
@@ -101,7 +101,7 @@ function Hero() {
           />
         )}
 
-        {/* Contenido */}
+       
         <div className="hero-wrapper relative z-10 flex flex-col justify-center h-full px-6 md:pl-25 bg-lightBg/80 leading-none pointer-events-none">
           <h1 className="hero-text text-left md:text-center w-full md:w-[70%] text-4xl md:text-7xl text-black font-bold mt-10 md:mt-15 font-space leading-tight pointer-events-none">
             We don't template, <br />

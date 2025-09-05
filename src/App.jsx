@@ -6,14 +6,14 @@ import { useRef, lazy, Suspense } from "react";
 import { useInView } from "react-intersection-observer";
 import { HelmetProvider } from "react-helmet-async";
 
-// Lazy loaded components
+
 const Mision = lazy(() => import("./components/Mision"));
 const Servicios = lazy(() => import("./components/Servicios"));
-const Precios = lazy(() => import("./components/Precios")); // antes Contact
+const Precios = lazy(() => import("./components/Precios")); 
 const Nosotros = lazy(() => import("./components/testimonios/Nosotros"));
 const Work = lazy(() => import("./components/Work"));
 const Faq = lazy(() => import("./components/Faq"));
-const Contact = lazy(() => import("./components/Contact")); // antes ContactSection
+const Contact = lazy(() => import("./components/Contact")); 
 
 function App() {
   const heroRef = useRef(null);
@@ -69,7 +69,7 @@ function App() {
           isDarkSection={shouldUseBlackText && !shouldUseWhiteText}
         />
 
-        {/* Hero */}
+       
         <section id="hero" ref={heroRef} className="min-h-screen bg-[#ECECEC]">
           <Hero />
         </section>
@@ -80,7 +80,7 @@ function App() {
             <Mision />
           </section>
 
-          {/* Nosotros */}
+         
           <section
             id="nosotros"
             ref={(el) => {
@@ -91,7 +91,7 @@ function App() {
             <Nosotros />
           </section>
 
-          {/* Servicios */}
+  
           <section
             id="servicios"
             ref={(el) => {
@@ -103,7 +103,7 @@ function App() {
             <Servicios />
           </section>
 
-          {/* Precios (antes Contact) */}
+       
           <section
             id="precios"
             className="min-h-screen bg-[#ECECEC]"
@@ -111,7 +111,7 @@ function App() {
             <Precios />
           </section>
 
-          {/* Work */}
+      
           <section
             id="work"
             ref={(el) => {
@@ -123,7 +123,7 @@ function App() {
             <Work />
           </section>
 
-          {/* FAQ */}
+         
           <section
             id="faq"
             ref={(el) => {
@@ -135,7 +135,7 @@ function App() {
             <Faq />
           </section>
 
-          {/* Contact (antes ContactSection) */}
+        
           <section id="contacto" ref={contactoRef} className="min-h-screen bg-gray-100">
             <Contact />
           </section>

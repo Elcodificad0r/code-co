@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 const Faq = () => {
   const [openItems, setOpenItems] = useState(new Set());
-  const [positions, setPositions] = useState([]); // Posiciones random fijas por render
+  const [positions, setPositions] = useState([]); // Posiciones random
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const heroTextRef = useRef(null);
@@ -31,7 +31,7 @@ const Faq = () => {
     }
   }, []);
 
-  // Animaciones hero y título
+ 
   useEffect(() => {
     if (gsapLoaded && window.gsap) {
       const gsap = window.gsap;
@@ -44,18 +44,18 @@ const Faq = () => {
     }
   }, [gsapLoaded]);
 
-  // Generar posiciones random solo una vez al montar
+  
   useEffect(() => {
     const newPositions = faqData.map(item => ({
       left: `calc(${item.pos.x} + ${(Math.random() - 0.5) * 8}%)`,
       top: `calc(${item.pos.y} + ${(Math.random() - 0.5) * 8}%)`,
-      rotation: item.rotation + (Math.random() - 0.5) * 8, // un toque experimental
-      scale: 0.95 + Math.random() * 0.1 // ligeras variaciones de tamaño
+      rotation: item.rotation + (Math.random() - 0.5) * 8, 
+      scale: 0.95 + Math.random() * 0.1 
     }));
     setPositions(newPositions);
   }, []);
 
-  // Toggle smooth
+  
   const toggleItem = (id) => {
     const newOpenItems = new Set(openItems);
     const isOpening = !newOpenItems.has(id);

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const WorkGallery = () => {
-  // Array de proyectos con diferentes tamaños para la galería
+
   const projects = [
     {
       id: 1,
       image: "/path/to/creative-resources-hero.jpg",
       alt: "Creative resources landing page con hero visual y tipografía experimental",
-      size: "large" // Imagen principal grande
+      size: "large" 
     },
     {
       id: 2,
@@ -85,11 +85,11 @@ const WorkGallery = () => {
   const galleryRef = useRef(null);
 
   useEffect(() => {
-    // GSAP CDN ya está cargado, podemos usarlo directamente
+   
     if (typeof window !== 'undefined' && window.gsap) {
       const gsap = window.gsap;
       
-      // Animación del texto gigante del hero
+      
       gsap.fromTo(heroTextRef.current, 
         { 
           scale: 0.8,
@@ -105,7 +105,7 @@ const WorkGallery = () => {
         }
       );
 
-      // Animación del texto vertical con efecto glitch
+     
       gsap.fromTo(verticalTextRef.current, 
         { 
           x: 50,
@@ -118,7 +118,7 @@ const WorkGallery = () => {
           delay: 0.2,
           ease: "power3.out",
           onComplete: () => {
-            // Efecto glitch después de la entrada
+            //glitch
             gsap.to(verticalTextRef.current, {
               x: Math.random() * 4 - 2,
               y: Math.random() * 4 - 2,
@@ -128,7 +128,7 @@ const WorkGallery = () => {
               ease: "power2.inOut",
               delay: 2,
               onComplete: () => {
-                // Volver a la posición original
+                // original
                 gsap.to(verticalTextRef.current, {
                   x: 0,
                   y: 0,
@@ -140,7 +140,7 @@ const WorkGallery = () => {
         }
       );
 
-      // Animación del título principal
+      // Animacion titulo
       gsap.fromTo(titleRef.current,
         {
           y: 50,
@@ -155,7 +155,7 @@ const WorkGallery = () => {
         }
       );
 
-      // Animación de la descripción
+      
       gsap.fromTo(descriptionRef.current,
         {
           y: 30,
@@ -170,7 +170,7 @@ const WorkGallery = () => {
         }
       );
 
-      // Animación de la galería
+      // Animación galery
       gsap.fromTo(galleryRef.current.children,
         {
           y: 60,
@@ -190,7 +190,7 @@ const WorkGallery = () => {
     }
   }, []);
 
-  // Script para cargar GSAP
+  // GSAP
   useEffect(() => {
     if (typeof window !== 'undefined' && !window.gsap) {
       const script = document.createElement('script');
@@ -233,7 +233,7 @@ const WorkGallery = () => {
   return (
     <section className="min-h-screen bg-[#ECECEC] py-12 px-4 md:px-6 relative overflow-hidden">
       
-      {/* Texto gigante de fondo */}
+  
       <div 
         ref={heroTextRef}
         className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
@@ -245,7 +245,7 @@ const WorkGallery = () => {
 
       <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* Header con texto experimental */}
+        
         <div className="mb-12 text-center">
           <div className="relative">
             
@@ -268,9 +268,9 @@ const WorkGallery = () => {
           </div>
         </div>
 
-        {/* Galería de proyectos con texto vertical */}
+       
         <div className="relative">
-          {/* Texto vertical WORK en grande */}
+         
           <div 
             ref={verticalTextRef}
             className="absolute -top-4 right-0 md:right-10 z-20 pointer-events-none select-none"
@@ -282,14 +282,14 @@ const WorkGallery = () => {
             </div>
           </div>
 
-          {/* Galería */}
+         
           <div ref={galleryRef} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 auto-rows-min">
             {projects.slice(0, visibleItems).map((project, index) => (
               <div 
                 key={project.id}
                 className={`${getSizeClasses(project.size)} ${getHeightClasses(project.size)} group cursor-pointer relative overflow-hidden rounded-2xl md:rounded-3xl bg-gray-200 hover:scale-[1.02] transition-all duration-500 ease-out`}
               >
-                {/* Placeholder para imagen */}
+               
                 <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">
                   <div className="text-center text-gray-600">
                     <div className="font-space text-xs md:text-sm mb-2 opacity-70">
@@ -301,7 +301,7 @@ const WorkGallery = () => {
                   </div>
                 </div>
                 
-                {/* Overlay con efecto hover */}
+               
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="font-space text-white text-sm font-medium">
@@ -310,7 +310,7 @@ const WorkGallery = () => {
                   </div>
                 </div>
 
-                {/* Elemento decorativo para proyectos destacados */}
+               
                 {project.size === 'large' && (
                   <div className="absolute top-4 right-4 w-3 h-3 bg-blue-500 rounded-full opacity-80"></div>
                 )}
@@ -319,7 +319,7 @@ const WorkGallery = () => {
           </div>
         </div>
 
-        {/* Botón Más */}
+       
         {visibleItems < projects.length && (
           <div className="text-center mt-8">
             <button 
@@ -330,18 +330,18 @@ const WorkGallery = () => {
                 MAS→
               </span>
               
-              {/* Efecto de hover */}
+           
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             </button>
             
-            {/* Indicador de progreso */}
+     
             <div className="mt-4 font-space text-sm text-gray-600">
               {visibleItems} de {projects.length} proyectos
             </div>
           </div>
         )}
 
-        {/* Mensaje cuando se muestran todos los proyectos */}
+     
         {visibleItems >= projects.length && (
           <div className="text-center mt-8">
             <div className="font-rubik80s text-2xl md:text-3xl text-black mb-2">
