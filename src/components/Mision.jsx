@@ -12,7 +12,7 @@ export default function Mision() {
        
         <div className="md:!w-1/2 h-[300px] md:!h-[500px] flex items-center justify-start md:!justify-start md:!pl-5">
           <img 
-            src="img/FOTONOSOTROS.png" 
+            src="img/FOTONOSOTROS.webp" 
             alt="Nosotros" 
             className="w-full h-full object-cover rounded-2xl shadow-lg"
           />
