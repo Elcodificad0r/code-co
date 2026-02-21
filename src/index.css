@@ -1,0 +1,51 @@
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rubik+80s+Fade&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+  background-color: #ECECEC;
+}
+
+/* Solo oscuro cuando Tailwind agrega la clase .dark — nunca por OS preference */
+html.dark {
+  background-color: #1E1E1E;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  color: #0A0F0D;
+  background-color: #ECECEC;
+}
+
+html.dark body {
+  color: #e0e4ff;
+  background-color: #1E1E1E;
+}
+
+@layer utilities {
+  .font-space {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .font-rubik80s {
+    font-family: 'Rubik 80s Fade', Arial, Helvetica, sans-serif;
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (min-width: 700px) and (max-width: 1100px) {
+  .hero-section .hero-text {
+    font-size: 4rem;
+    line-height: 1.1;
+  }
+}
