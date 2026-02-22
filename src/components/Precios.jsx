@@ -325,7 +325,7 @@ export default function PricingSection() {
               <div className="pricing-content-gap mt-6 md:mt-15 lg:mt-12 flex-1 flex flex-col sm:px-8 lg:px-8 min-h-0">
                 <div className={showLetter ? "mb-9" : "mb-4"}>
                   <h3
-                    className="pricing-title text-xl sm:text-2xl md:text-[20px] lg:text-[18px] font-bold font-space leading-tight mt-5 whitespace-pre-line text-black"
+                    className="pricing-title text-xl sm:text-2xl md:text-[20px] lg:text-[18px] font-bold font-space leading-tight mt-1 whitespace-pre-line text-black"
                     style={{ color: textPrimary }}
                   >
                     {item.title}
