@@ -300,36 +300,34 @@ const EmailForm = ({ onBack, dark, externalSubmitRef }) => {
 
     try {
       await emailjs.send(
-        "service_9ypzsdp",
-        "template_sn5a04s",
-        {
-          to_email: "hola@codenco.mx",
-          to_name: "Code&Co.",
-          from_name: nombre,
-          from_email: email,
-          reply_to: email,
-          plan,
-          message: descripcion,
-          subject: `Nuevo lead — ${nombre}`,
-        },
-        "JTkgeHf5iUW7v_C28"
-      );
+  "service_9ypzsdp",
+  "template_sn5a04s",
+  {
+    email: "hola@codenco.mx",
+    name: "Code&Co.",
+    from_name: nombre,
+    from_email: email,
+    reply_to: email,
+    plan,
+    message: descripcion,
+  },
+  "JTkgeHf5iUW7v_C28"
+);
 
-      await emailjs.send(
-        "service_9ypzsdp",
-        "template_sn5a04s",
-        {
-          to_email: email,
-          to_name: nombre,
-          from_name: "Code&Co. | WEB SOLUTIONS",
-          from_email: "hola@codenco.mx",
-          reply_to: "hola@codenco.mx",
-          plan,
-          message: descripcion,
-          subject: "Recibimos tu solicitud",
-        },
-        "JTkgeHf5iUW7v_C28"
-      );
+await emailjs.send(
+  "service_9ypzsdp",
+  "template_sn5a04s",
+  {
+    email: email,
+    name: nombre,
+    from_name: "Code&Co. | WEB SOLUTIONS",
+    from_email: "hola@codenco.mx",
+    reply_to: "hola@codenco.mx",
+    plan,
+    message: descripcion,
+  },
+  "JTkgeHf5iUW7v_C28"
+);
 
       setSent(true);
 
