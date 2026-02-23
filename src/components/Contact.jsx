@@ -299,7 +299,8 @@ const EmailForm = ({ onBack, dark, externalSubmitRef }) => {
     setSending(true);
 
     try {
-     await emailjs.send(
+    // ✅ 1) Lead hacia tu inbox (hola@codenco.mx)
+await emailjs.send(
   "service_s473zvh",
   "template_sn5a04s",
   {
@@ -308,13 +309,14 @@ const EmailForm = ({ onBack, dark, externalSubmitRef }) => {
     from_name: nombre,
     from_email: email,
     reply_to: email,
-    plan,
+    plan: plan || "No especificado",
     message: descripcion,
     subject: `Nuevo lead — ${nombre}${plan ? ` · ${plan}` : ""}`,
   },
   "JTkgeHf5iUW7v_C28"
 );
 
+// ✅ 2) Auto-reply al cliente
 await emailjs.send(
   "service_s473zvh",
   "template_sn5a04s",
@@ -324,7 +326,7 @@ await emailjs.send(
     from_name: "Code&Co. | WEB SOLUTIONS",
     from_email: "hola@codenco.mx",
     reply_to: "hola@codenco.mx",
-    plan,
+    plan: plan || "No especificado",
     message: descripcion,
     subject: `Hola ${nombre} — recibimos tu solicitud`,
   },
