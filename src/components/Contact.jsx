@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import emailjs from "@emailjs/browser";
+import Swal from "sweetalert2";
 
 function useHtmlDark() {
   const [dark, setDark] = useState(() =>
@@ -94,7 +96,7 @@ const TerminosModal = ({ onClose, dark }) => {
 
           <div className="mt-10 pt-6 text-center" style={{ borderTop: `1px solid ${headerBorder}` }}>
             <p className="font-space text-xs tracking-wider" style={{ color: textMuted }}>
-              Code&Co. · Monterrey, N.L. · holacodenco@gmail.com · 2026
+              Code&Co. · Monterrey, N.L. · hola@codenco.mx · 2026
             </p>
           </div>
         </div>
@@ -104,7 +106,7 @@ const TerminosModal = ({ onClose, dark }) => {
 };
 
 // ============================================================
-// SIMPLE EMAIL FORM
+// SIMPLE EMAIL FORM (EmailJS + SweetAlert2)
 // ============================================================
 const EmailForm = ({ onBack, dark }) => {
   const textPrimary  = dark ? "#F2F0E4"           : "#111827";
@@ -115,17 +117,120 @@ const EmailForm = ({ onBack, dark }) => {
   const inputBorder  = dark ? "#444444"           : "#E5E7EB";
   const labelColor   = dark ? "#8899aa"           : "#6B7280";
 
-  const [form, setForm] = useState({ nombre: "", plan: "", descripcion: "" });
+  const [form, setForm] = useState({ nombre: "", email: "", plan: "", descripcion: "" });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
-  const handleSubmit = (e) => {
+  const isEmailValid = (value) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
+
+  // ✅ Botón OK negro para el swal azul (faltantes)
+  const swalMissing = {
+    background: "#0520F5",
+    color: "#FFFFFF",
+    confirmButtonColor: "#000000",
+  };
+
+  const swalFail = {
+    background: "#C8FF55",
+    color: "#000000",
+    confirmButtonColor: "#000000",
+  };
+
+  const swalSuccess = {
+    background: dark ? "#1E1E1E" : "#FFFFFF",
+    color: dark ? "#F2F0E4" : "#111827",
+    confirmButtonColor: "#0520F5",
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Contacto Code&Co. — ${form.nombre}`);
-    const body = encodeURIComponent(
-      `Nombre / Empresa: ${form.nombre}\nPlan de interés: ${form.plan}\n\n${form.descripcion}`
-    );
-    window.location.href = `mailto:holacodenco@gmail.com?subject=${subject}&body=${body}`;
-    setSent(true);
+
+    const nombre = (form.nombre || "").trim();
+    const email = (form.email || "").trim();
+    const descripcion = (form.descripcion || "").trim();
+    const plan = ((form.plan || "").trim() || "No especificado");
+
+    if (!nombre || !email || !descripcion) {
+      await Swal.fire({
+        ...swalMissing,
+        icon: "warning",
+        title: "Falta información",
+        text: "Completa Nombre, Email y la descripción del proyecto para poder enviarlo.",
+      });
+      return;
+    }
+    if (!isEmailValid(email)) {
+      await Swal.fire({
+        ...swalMissing,
+        icon: "warning",
+        title: "Email inválido",
+        text: "Revisa tu correo. Parece incompleto o con formato incorrecto.",
+      });
+      return;
+    }
+
+    setSending(true);
+
+    try {
+      await emailjs.send(
+        "service_9ypzsdp",
+        "template_sn5a04s",
+        {
+          to_email: "hola@codenco.mx",
+          to_name: "Code&Co.",
+          from_name: nombre,
+          from_email: email,
+          reply_to: email,
+          plan,
+          message: descripcion,
+          subject: `Nuevo lead — ${nombre}`,
+        },
+        "JTkgeHf5iUW7v_C28"
+      );
+
+      await emailjs.send(
+        "service_9ypzsdp",
+        "template_sn5a04s",
+        {
+          to_email: email,
+          to_name: nombre,
+          from_name: "Code&Co. | WEB SOLUTIONS",
+          from_email: "hola@codenco.mx",
+          reply_to: "hola@codenco.mx",
+          plan,
+          message: descripcion,
+          subject: "Recibimos tu solicitud",
+        },
+        "JTkgeHf5iUW7v_C28"
+      );
+
+      setSent(true);
+
+      await Swal.fire({
+        ...swalSuccess,
+        icon: "success",
+        title: "Mensaje enviado",
+        text: "Recibimos tu solicitud. Te respondemos en breve.",
+      });
+    } catch (err) {
+      console.error("EmailJS error:", err);
+
+      const reason =
+        (err && (err.text || err.message)) ? String(err.text || err.message) : "";
+
+      await Swal.fire({
+        ...swalFail,
+        icon: "error",
+        title: "No se pudo enviar",
+        html:
+          `Intenta de nuevo en unos minutos.<br/>` +
+          `Si sigue fallando, escríbenos a <b>hola@codenco.mx</b>.` +
+          (reason ? `<br/><br/><span style="opacity:0.9"><b>Debug:</b> ${reason}</span>` : ""),
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -133,7 +238,6 @@ const EmailForm = ({ onBack, dark }) => {
       className="relative overflow-hidden rounded-3xl p-8 shadow-xl"
       style={{ background: cardBg, backdropFilter: "blur(8px)", border: `1px solid ${cardBorder}` }}
     >
-      {/* Back button */}
       <button
         onClick={onBack}
         className="flex items-center gap-2 font-space text-sm transition-colors mb-6 group"
@@ -153,7 +257,9 @@ const EmailForm = ({ onBack, dark }) => {
             </svg>
           </div>
           <h3 className="font-rubik80s text-2xl" style={{ color: textPrimary }}>¡Listo!</h3>
-          <p className="font-space text-sm max-w-xs" style={{ color: textMuted }}>Tu cliente de correo se abrió con los datos listos. Si no se abrió, escríbenos directamente a holacodenco@gmail.com</p>
+          <p className="font-space text-sm max-w-xs" style={{ color: textMuted }}>
+            Tu mensaje fue enviado. Si quieres agregar algo, escríbenos a hola@codenco.mx
+          </p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -163,10 +269,23 @@ const EmailForm = ({ onBack, dark }) => {
             </label>
             <input
               type="text"
-              required
               value={form.nombre}
               onChange={(e) => setForm({ ...form, nombre: e.target.value })}
               placeholder="Ej. Panadería El Sol, Juan Pérez..."
+              className="w-full font-space text-sm rounded-xl px-4 py-3 outline-none transition-colors"
+              style={{ background: inputBg, border: `1px solid ${inputBorder}`, color: textPrimary }}
+            />
+          </div>
+
+          <div>
+            <label className="font-space text-xs font-bold uppercase tracking-widest block mb-2" style={{ color: labelColor }}>
+              Email *
+            </label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="tu@correo.com"
               className="w-full font-space text-sm rounded-xl px-4 py-3 outline-none transition-colors"
               style={{ background: inputBg, border: `1px solid ${inputBorder}`, color: textPrimary }}
             />
@@ -196,8 +315,7 @@ const EmailForm = ({ onBack, dark }) => {
               Describe tu proyecto *
             </label>
             <textarea
-              required
-              rows={4}
+              rows={3}
               value={form.descripcion}
               onChange={(e) => setForm({ ...form, descripcion: e.target.value })}
               placeholder="Cuéntanos brevemente qué necesitas..."
@@ -206,22 +324,25 @@ const EmailForm = ({ onBack, dark }) => {
             />
           </div>
 
-          {/* Submit — glow azul #0520F5 */}
           <button
             type="submit"
+            disabled={sending}
             className="w-full font-space font-bold text-white py-4 rounded-xl text-base tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
             style={{
               background: "#0520F5",
               boxShadow: "0 0 24px 6px rgba(5,32,245,0.45), 0 4px 20px rgba(5,32,245,0.3)",
+              opacity: sending ? 0.85 : 1,
+              cursor: sending ? "not-allowed" : "pointer",
             }}
             onMouseEnter={(e) => {
+              if (sending) return;
               e.currentTarget.style.boxShadow = "0 0 40px 12px rgba(5,32,245,0.65), 0 4px 32px rgba(5,32,245,0.45)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.boxShadow = "0 0 24px 6px rgba(5,32,245,0.45), 0 4px 20px rgba(5,32,245,0.3)";
             }}
           >
-            ENVIAR MENSAJE →
+            {sending ? "ENVIANDO..." : "ENVIAR MENSAJE →"}
           </button>
         </form>
       )}
@@ -238,7 +359,7 @@ const ContactSection = () => {
   const bg            = dark ? "#1E1E1E"              : "#ECECEC";
   const textPrimary   = dark ? "#F2F0E4"              : "#111827";
   const textMuted     = dark ? "#a0a8b8"              : "#4B5563";
-  const accentBlue    = dark ? "#7c9ef5"              : "#2563EB"; // blue-600
+  const accentBlue    = dark ? "#7c9ef5"              : "#2563EB";
   const quoteBg       = dark ? "rgba(42,42,42,0.60)"  : "rgba(255,255,255,0.60)";
   const quoteBorder   = dark ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.40)";
   const footerBg      = dark ? "rgba(255,255,255,0.05)" : "rgba(31,41,55,0.05)";
@@ -251,6 +372,13 @@ const ContactSection = () => {
   const [gsapLoaded, setGsapLoaded] = useState(false);
   const [showTerminos, setShowTerminos] = useState(false);
   const [showEmailForm, setShowEmailForm] = useState(false);
+  const [showFormHint, setShowFormHint] = useState(false);
+
+  useEffect(() => {
+    try {
+      emailjs.init("JTkgeHf5iUW7v_C28");
+    } catch {}
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -370,22 +498,72 @@ const ContactSection = () => {
         .email-cta-btn:active {
           transform: scale(0.98);
         }
+
+        /* ── CTA WRAP: no empuja el botón; hint absolute a la derecha ── */
+        .cta-wrap {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+        }
+        .cta-hint {
+          position: absolute;
+          left: calc(100% + 14px);
+          top: 50%;
+          transform: translateY(-50%);
+          display: inline-flex;
+          flex-direction: column;
+          align-items: flex-start;
+          text-align: left;
+          max-width: 320px;
+          pointer-events: auto;
+        }
+        .cta-hint-row {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .cta-arrow-up {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 22px;
+          height: 22px;
+          font-weight: 800;
+          line-height: 1;
+          transform: translateY(-2px);
+        }
+
+        /* ✅ Mobile: hint abajo (column), sin mover el botón */
+        @media (max-width: 767px) {
+          .cta-wrap {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+          }
+          .cta-hint {
+            position: static;
+            transform: none;
+            left: auto;
+            top: auto;
+            margin-top: 14px;
+            align-items: center;
+            text-align: center;
+            max-width: 92vw;
+          }
+          .cta-hint-row {
+            justify-content: center;
+          }
+        }
       `}</style>
 
-      {/* Outer wrapper: corta overflow-x sin romper overflow visible de desktop */}
-      <div
-        className="contact-outer"
-        style={{ overflowX: "hidden", marginBottom: 0, paddingBottom: 0 }}
-      >
+      <div className="contact-outer" style={{ overflowX: "hidden", marginBottom: 0, paddingBottom: 0 }}>
         <section
           ref={sectionRef}
           className="contact-section px-4 md:px-6 relative md:pt-16 lg:pt-40"
           style={{ backgroundColor: bg, marginBottom: 0 }}
         >
-          <div
-            className="contact-inner max-w-7xl mx-auto"
-            style={{ marginBottom: 0 }}
-          >
+          <div className="contact-inner max-w-7xl mx-auto" style={{ marginBottom: 0 }}>
             <div className="grid grid-cols-1 lg:!grid-cols-2 gap-12 lg:!gap-16 items-center lg:!items-start justify-items-center lg:!justify-items-start text-center lg:!text-left">
 
               {/* LEFT */}
@@ -432,19 +610,23 @@ const ContactSection = () => {
                 </div>
               </div>
 
-              {/* RIGHT — widget-card es el anchor del asterisco */}
+              {/* RIGHT */}
               <div className="lg:!pl-8 w-full max-w-md mx-auto lg:!mx-0 lg:!max-w-none">
                 <div className="widget-card relative">
-                  {/* Glow */}
                   <div className="absolute -inset-4 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-3xl blur-xl" />
 
-                  {/* Fixed-height container so asterisk stays pinned regardless of content */}
                   <div
                     className="calendly-mobile-wrap relative rounded-3xl"
                     style={{ height: "600px", maxHeight: "600px", overflow: showEmailForm ? "auto" : "hidden" }}
                   >
                     {showEmailForm ? (
-                      <EmailForm onBack={() => setShowEmailForm(false)} dark={dark} />
+                      <EmailForm
+                        onBack={() => {
+                          setShowEmailForm(false);
+                          setShowFormHint(false);
+                        }}
+                        dark={dark}
+                      />
                     ) : (
                       <div
                         ref={widgetRef}
@@ -454,11 +636,6 @@ const ContactSection = () => {
                     )}
                   </div>
 
-                  {/*
-                    ASTERISCO anclado a esquina top-right del widget-card.
-                    transform: translate(22%, -22%) lo desplaza hacia afuera — editorial.
-                    z-index 100001 → sobre todo EXCEPTO el modal (100002+).
-                  */}
                   <div className="asterisk-wrap" ref={asteriskRef}>
                     <img src="img/contact-asterisk.webp" alt="" aria-hidden="true" />
                   </div>
@@ -469,15 +646,42 @@ const ContactSection = () => {
             {/* CTA */}
             <div className="mt-12 text-center space-y-4">
               <p className="font-space text-lg" style={{ color: textMuted }}>¿Prefieres escribirnos directamente?</p>
-              <button
-                className="email-cta-btn font-space text-white px-12 py-5 rounded-full text-lg font-bold tracking-wider"
-                onClick={() => setShowEmailForm((v) => !v)}
-              >
-                {showEmailForm ? "← VER CALENDARIO" : "ENVIAR EMAIL →"}
-              </button>
+
+              <div className="cta-wrap">
+                <button
+                  className="email-cta-btn font-space text-white px-12 py-5 rounded-full text-lg font-bold tracking-wider"
+                  onClick={() => {
+                    setShowEmailForm((v) => {
+                      const next = !v;
+                      setShowFormHint(next); // show hint only when form is opened
+                      return next;
+                    });
+                  }}
+                >
+                  {showEmailForm ? "← VER CALENDARIO" : "ENVIAR EMAIL →"}
+                </button>
+
+                {/* Hint: no empuja el botón; en desktop aparece a la derecha, en mobile abajo */}
+                {showFormHint && showEmailForm ? (
+                  <div className="cta-hint px-2">
+                    <div className="cta-hint-row font-space text-sm" style={{ color: textMuted }}>
+                      <span className="cta-arrow-up" style={{ color: "#0520F5" }}>↑</span>
+                      <span>Formulario activo. Déjanos tus datos y lo enviamos directo a Code&Co.</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowFormHint(false)}
+                      className="font-space text-xs underline underline-offset-2 hover:opacity-60 transition-opacity cursor-pointer bg-transparent border-0 p-0"
+                      style={{ color: textMuted, marginTop: "10px" }}
+                    >
+                      Entendido
+                    </button>
+                  </div>
+                ) : null}
+              </div>
             </div>
 
-            {/* FOOTER — 2026, sin espacio blanco mobile */}
+            {/* FOOTER */}
             <footer
               className="contact-footer mt-12 w-full backdrop-blur-sm rounded-xl py-6 px-4 md:px-8 font-space"
               style={{ backgroundColor: footerBg, marginBottom: 0, color: footerText }}
