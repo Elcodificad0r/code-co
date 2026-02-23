@@ -310,6 +310,7 @@ const EmailForm = ({ onBack, dark, externalSubmitRef }) => {
     reply_to: email,
     plan,
     message: descripcion,
+    subject: `Nuevo lead — ${nombre}${plan ? ` · ${plan}` : ""}`,
   },
   "JTkgeHf5iUW7v_C28"
 );
@@ -319,12 +320,14 @@ await emailjs.send(
   "template_sn5a04s",
   {
     email: email,
-    name: nombre,
+    name: "Code&Co. | WEB SOLUTIONS",
+    to_name: nombre,
     from_name: "Code&Co. | WEB SOLUTIONS",
     from_email: "hola@codenco.mx",
     reply_to: "hola@codenco.mx",
     plan,
     message: descripcion,
+    subject: `Hola ${nombre} — recibimos tu solicitud`,
   },
   "JTkgeHf5iUW7v_C28"
 );
