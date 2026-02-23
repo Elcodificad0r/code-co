@@ -230,6 +230,7 @@ export default function PricingSection() {
         }
 
         @media (min-width: 768px) {
+          .pricing-cta-row { flex-direction: row !important; align-items: center !important; justify-content: flex-end !important; }
           .pricing-card { transition: none !important; }
           .pricing-letter { margin-top: 0.25rem !important; }
           .pricing-title { font-size: 15px !important; line-height: 1.2 !important; }
@@ -424,6 +425,32 @@ export default function PricingSection() {
           </a>
           .
         </p>
+
+        {/* CTA plan personalizado */}
+        <div className="pricing-cta-row mt-5 flex flex-col sm:flex-row items-start sm:items-center sm:justify-end gap-3">
+          <p className="text-sm font-space" style={{ color: textMuted ?? "#374151" }}>
+            ¿No tenemos un plan para ti? Escríbenos a{" "}
+            <span className="font-bold" style={{ color: textPrimary }}>hola@codenco.mx</span>
+            {" "}y lleguemos a un acuerdo.
+          </p>
+          <a
+            href="mailto:hola@codenco.mx"
+            className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 font-bold font-space text-sm text-white tracking-wide transition-all duration-300 hover:scale-105"
+            style={{
+              backgroundColor: "#0520F5",
+              borderRadius: "9999px",
+              boxShadow: "0 0 18px rgba(5,32,245,0.55), 0 0 40px rgba(5,32,245,0.25)",
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.boxShadow = "0 0 28px rgba(5,32,245,0.85), 0 0 60px rgba(5,32,245,0.4)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.boxShadow = "0 0 18px rgba(5,32,245,0.55), 0 0 40px rgba(5,32,245,0.25)";
+            }}
+          >
+            Escríbenos 🫱🏻‍🫲🏼
+          </a>
+        </div>
       </div>
     </section>
   );

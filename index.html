@@ -1,9 +1,28 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO -->
+    <title>Code & Co. | Código Real, Rendimiento Real</title>
+    <meta name="description" content="Creamos aplicaciones web rápidas, escalables y sin límites. Código real, rendimiento real." />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Landing Pages a Medida | Code & Co." />
+    <meta property="og:description" content="Sitios web únicos, sin plantillas y sin límites. Desarrollados con código limpio y alto rendimiento." />
+    <meta property="og:image" content="/img/lowresherospline.webp" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://elcodificad0r.github.io/code-co" />
+    <meta property="og:locale" content="es_MX" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Landing Pages a Medida | Code & Co." />
+    <meta name="twitter:description" content="Sitios web únicos, sin plantillas y sin límites. Código real, rendimiento real." />
+    <meta name="twitter:image" content="/img/lowresherospline.webp" />
+
     <link href="./src/App.css" rel="stylesheet">
 
     <!-- Anti-flash dark mode: debe ir ANTES de cualquier CSS -->
@@ -17,15 +36,22 @@
       })();
     </script>
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts (no bloqueante) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Rubik+80s+Fade&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Rubik+80s+Fade&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
-    <title>Code & Co.</title>
   </head>
   <body class="font-space bg-lightBg">
     <div id="root"></div>
