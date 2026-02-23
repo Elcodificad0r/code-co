@@ -299,12 +299,12 @@ const EmailForm = ({ onBack, dark, externalSubmitRef }) => {
     setSending(true);
 
     try {
-      await emailjs.send(
+     await emailjs.send(
   "service_s473zvh",
   "template_sn5a04s",
   {
-    email: "hola@codenco.mx",
-    name: "Code&Co.",
+    to_email: "hola@codenco.mx",
+    to_name: "Code&Co.",
     from_name: nombre,
     from_email: email,
     reply_to: email,
@@ -319,8 +319,7 @@ await emailjs.send(
   "service_s473zvh",
   "template_sn5a04s",
   {
-    email: email,
-    name: "Code&Co. | WEB SOLUTIONS",
+    to_email: email,
     to_name: nombre,
     from_name: "Code&Co. | WEB SOLUTIONS",
     from_email: "hola@codenco.mx",

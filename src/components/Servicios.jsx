@@ -182,47 +182,30 @@ export default function ServicesHero() {
         }
       };
 
-      // ✅ Desktop: EXACTAMENTE igual que lo tenías (scrub + thresholds)
-      // ✅ Mobile: ciclo rápido (DISEÑ WEB → APP WEB → SEO WEB) sin romper desktop
-      if (isMobile) {
-        setMainState(0);
+      ScrollTrigger.create({
+        trigger: isMobile ? containerRef.current : mainTextRef.current,
+        start: mainScrubStart,
+        end: mainScrubEnd,
+        scrub: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
 
-        const cycleTl = gsap
-          .timeline({ paused: true })
-          .call(() => setMainState(0))
-          .to({}, { duration: 0.55 })
-          .call(() => setMainState(1))
-          .to({}, { duration: 0.55 })
-          .call(() => setMainState(2));
-
-        ScrollTrigger.create({
-          trigger: containerRef.current,
-          start: "top 90%",
-          end: "bottom 30%",
-          onEnter: () => cycleTl.restart(true),
-          onEnterBack: () => cycleTl.restart(true),
-          onLeaveBack: () => setMainState(0),
-        });
-      } else {
-        ScrollTrigger.create({
-          trigger: mainTextRef.current,
-          start: mainScrubStart,
-          end: mainScrubEnd,
-          scrub: 1,
-          onUpdate: (self) => {
-            const progress = self.progress;
-
+          if (isMobile) {
+            if (progress < 0.34) setMainState(0);
+            else if (progress < 0.67) setMainState(1);
+            else setMainState(2);
+          } else {
             if (progress < 0.09) setMainState(0);
             else if (progress < 0.26) setMainState(1);
             else setMainState(2);
+          }
 
-            gsap.to(mainTextRef.current, {
-              scale: 1 + Math.sin(progress * Math.PI * 4) * 0.02,
-              duration: 0.1,
-            });
-          },
-        });
-      }
+          gsap.to(mainTextRef.current, {
+            scale: 1 + Math.sin(progress * Math.PI * 4) * 0.02,
+            duration: 0.1,
+          });
+        },
+      });
     }, containerRef);
 
     return () => ctx.revert();
