@@ -1,4 +1,9 @@
+// PASO 4: import normal — ya no carga scripts desde CDN en runtime
 import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const steps = [
   {
@@ -43,113 +48,96 @@ export default function Proceso() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const loadGsap = async () => {
-      if (!window.gsap) {
-        await new Promise((res) => {
-          const s = document.createElement("script");
-          s.src = "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js";
-          s.onload = res;
-          document.head.appendChild(s);
-        });
-      }
-      if (!window.ScrollTrigger) {
-        await new Promise((res) => {
-          const s = document.createElement("script");
-          s.src = "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js";
-          s.onload = res;
-          document.head.appendChild(s);
-        });
-        window.gsap.registerPlugin(window.ScrollTrigger);
-      }
+    // PASO 5: guard mobile — parallax scrub y loops infinitos solo en desktop
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
 
-      const gsap = window.gsap;
-      const ST = window.ScrollTrigger;
+    // ── 1. FULL SCREEN COLOR WIPE: kill any running tween before starting ──
+    if (overlayRef.current) {
+      gsap.set(overlayRef.current, { yPercent: 0 });
 
-      // ── 1. FULL SCREEN COLOR WIPE: kill any running tween before starting ──
-      if (overlayRef.current) {
-        gsap.set(overlayRef.current, { yPercent: 0 });
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top 80%",
+        onEnter: () => {
+          gsap.killTweensOf(overlayRef.current);
+          gsap.to(overlayRef.current, {
+            yPercent: -100,
+            duration: 1.1,
+            ease: "power3.inOut",
+            overwrite: true,
+          });
+        },
+        onLeaveBack: () => {
+          gsap.killTweensOf(overlayRef.current);
+          gsap.to(overlayRef.current, {
+            yPercent: 0,
+            duration: 0.9,
+            ease: "power3.inOut",
+            overwrite: true,
+          });
+        },
+      });
+    }
 
-        ScrollTrigger.create({
-          trigger: sectionRef.current,
-          start: "top 80%",
-          onEnter: () => {
-            gsap.killTweensOf(overlayRef.current);
-            gsap.to(overlayRef.current, {
-              yPercent: -100,
-              duration: 1.1,
-              ease: "power3.inOut",
-              overwrite: true,
-            });
-          },
-          onLeaveBack: () => {
-            gsap.killTweensOf(overlayRef.current);
-            gsap.to(overlayRef.current, {
-              yPercent: 0,
-              duration: 0.9,
-              ease: "power3.inOut",
-              overwrite: true,
-            });
-          },
-        });
-      }
+    // ── 1b. BOTTOM WIPE: kill any running tween before starting ──
+    if (overlayBottomRef.current) {
+      gsap.set(overlayBottomRef.current, { yPercent: 100 });
 
-      // ── 1b. BOTTOM WIPE: kill any running tween before starting ──
-      if (overlayBottomRef.current) {
-        gsap.set(overlayBottomRef.current, { yPercent: 100 });
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "bottom 50%",
+        onEnter: () => {
+          gsap.killTweensOf(overlayBottomRef.current);
+          gsap.to(overlayBottomRef.current, {
+            yPercent: -100,
+            duration: 1.6,
+            ease: "power3.inOut",
+            overwrite: true,
+          });
+        },
+        onLeaveBack: () => {
+          gsap.killTweensOf(overlayBottomRef.current);
+          gsap.to(overlayBottomRef.current, {
+            yPercent: 100,
+            duration: 1.0,
+            ease: "power3.inOut",
+            overwrite: true,
+          });
+        },
+      });
+    }
 
-        ScrollTrigger.create({
-          trigger: sectionRef.current,
-          start: "bottom 50%",
-          onEnter: () => {
-            gsap.killTweensOf(overlayBottomRef.current);
-            gsap.to(overlayBottomRef.current, {
-              yPercent: -100,
-              duration: 1.6,
-              ease: "power3.inOut",
-              overwrite: true,
-            });
-          },
-          onLeaveBack: () => {
-            gsap.killTweensOf(overlayBottomRef.current);
-            gsap.to(overlayBottomRef.current, {
-              yPercent: 100,
-              duration: 1.0,
-              ease: "power3.inOut",
-              overwrite: true,
-            });
-          },
-        });
-      }
+    // ── 2. PROCESO title — reveal only, NO scrub parallax (prevents jiggle) ──
+    if (titleRef.current) {
+      gsap.fromTo(titleRef.current,
+        { opacity: 0, y: 60, skewY: 3 },
+        {
+          opacity: 1, y: 0, skewY: 0,
+          duration: 1.4, ease: "power4.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: titleRef.current, start: "top 85%", once: true },
+        }
+      );
+    }
 
-      // ── 2. PROCESO title — reveal only, NO scrub parallax (prevents jiggle) ──
-      if (titleRef.current) {
-        gsap.fromTo(titleRef.current,
-          { opacity: 0, y: 60, skewY: 3 },
-          {
-            opacity: 1, y: 0, skewY: 0,
-            duration: 1.4, ease: "power4.out",
-            clearProps: "transform",
-            scrollTrigger: { trigger: titleRef.current, start: "top 85%", once: true },
-          }
-        );
-      }
+    // ── 3. Tag line stagger reveal ──
+    if (tagRef.current) {
+      gsap.fromTo(tagRef.current,
+        { opacity: 0, x: -30 },
+        { opacity: 1, x: 0, duration: 0.8, ease: "power3.out", delay: 0.2,
+          scrollTrigger: { trigger: tagRef.current, start: "top 88%", once: true } }
+      );
+    }
 
-      // ── 3. Tag line stagger reveal ──
-      if (tagRef.current) {
-        gsap.fromTo(tagRef.current,
-          { opacity: 0, x: -30 },
-          { opacity: 1, x: 0, duration: 0.8, ease: "power3.out", delay: 0.2,
-            scrollTrigger: { trigger: tagRef.current, start: "top 88%", once: true } }
-        );
-      }
-
-      // ── 4. Subtitle parallax + reveal ──
-      if (subtitleRef.current) {
-        gsap.fromTo(subtitleRef.current,
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 1.1, ease: "power3.out", delay: 0.4,
-            scrollTrigger: { trigger: subtitleRef.current, start: "top 88%", once: true } }
-        );
+    // ── 4. Subtitle reveal + parallax (parallax solo desktop) ──
+    if (subtitleRef.current) {
+      gsap.fromTo(subtitleRef.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1.1, ease: "power3.out", delay: 0.4,
+          scrollTrigger: { trigger: subtitleRef.current, start: "top 88%", once: true } }
+      );
+      // PASO 5: scrub parallax solo en desktop
+      if (!isMobile) {
         gsap.to(subtitleRef.current, {
           y: -30,
           ease: "none",
@@ -161,39 +149,41 @@ export default function Proceso() {
           },
         });
       }
+    }
 
-      // ── 5. Separator scaleX wipe ──
-      if (sepRef.current) {
-        gsap.fromTo(sepRef.current,
-          { scaleX: 0, transformOrigin: "left center" },
-          { scaleX: 1, duration: 1.4, ease: "power3.out",
-            scrollTrigger: { trigger: sepRef.current, start: "top 92%", once: true } }
-        );
-      }
+    // ── 5. Separator scaleX wipe ──
+    if (sepRef.current) {
+      gsap.fromTo(sepRef.current,
+        { scaleX: 0, transformOrigin: "left center" },
+        { scaleX: 1, duration: 1.4, ease: "power3.out",
+          scrollTrigger: { trigger: sepRef.current, start: "top 92%", once: true } }
+      );
+    }
 
-      // ── 6. Vertical center line scaleY ──
-      if (lineRef.current) {
-        gsap.fromTo(lineRef.current,
-          { scaleY: 0, transformOrigin: "top center" },
-          { scaleY: 1, duration: 2, ease: "power3.out",
-            scrollTrigger: { trigger: lineRef.current, start: "top 75%", once: true } }
-        );
-      }
+    // ── 6. Vertical center line scaleY ──
+    if (lineRef.current) {
+      gsap.fromTo(lineRef.current,
+        { scaleY: 0, transformOrigin: "top center" },
+        { scaleY: 1, duration: 2, ease: "power3.out",
+          scrollTrigger: { trigger: lineRef.current, start: "top 75%", once: true } }
+      );
+    }
 
-      // ── 7. Steps: alternating slide + depth ──
-      itemsRef.current.forEach((el, i) => {
-        if (!el) return;
-        const isLeft = i % 2 === 0;
-        // Reveal
-        gsap.fromTo(el,
-          { x: isLeft ? -80 : 80, opacity: 0, rotateY: isLeft ? 8 : -8 },
-          {
-            x: 0, opacity: 1, rotateY: 0,
-            duration: 1.2, ease: "power3.out",
-            scrollTrigger: { trigger: el, start: "top 85%", once: true },
-          }
-        );
-        // Subtle parallax per step
+    // ── 7. Steps: alternating slide + depth ──
+    itemsRef.current.forEach((el, i) => {
+      if (!el) return;
+      const isLeft = i % 2 === 0;
+      // Reveal — corre en todos los dispositivos
+      gsap.fromTo(el,
+        { x: isLeft ? -80 : 80, opacity: 0, rotateY: isLeft ? 8 : -8 },
+        {
+          x: 0, opacity: 1, rotateY: 0,
+          duration: 1.2, ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 85%", once: true },
+        }
+      );
+      // PASO 5: scrub parallax por step solo en desktop
+      if (!isMobile) {
         gsap.to(el, {
           y: (i % 2 === 0 ? -1 : 1) * 25,
           ease: "none",
@@ -204,18 +194,21 @@ export default function Proceso() {
             scrub: true,
           },
         });
-      });
+      }
+    });
 
-      // ── 8. Dots: elastic pop stagger ──
-      sectionRef.current?.querySelectorAll(".proceso-dot").forEach((dot, i) => {
-        gsap.fromTo(dot,
-          { scale: 0, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.7, ease: "back.out(2.5)",
-            scrollTrigger: { trigger: dot, start: "top 90%", once: true },
-            delay: i * 0.1,
-          }
-        );
-        // Pulse glow loop
+    // ── 8. Dots: elastic pop stagger ──
+    sectionRef.current?.querySelectorAll(".proceso-dot").forEach((dot, i) => {
+      // Reveal — corre en todos los dispositivos
+      gsap.fromTo(dot,
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.7, ease: "back.out(2.5)",
+          scrollTrigger: { trigger: dot, start: "top 90%", once: true },
+          delay: i * 0.1,
+        }
+      );
+      // PASO 5: pulse loop infinito y parallax de dots solo en desktop
+      if (!isMobile) {
         gsap.to(dot, {
           boxShadow: "0 0 0 10px rgba(255,255,255,0.0)",
           scale: 1.15,
@@ -225,7 +218,6 @@ export default function Proceso() {
           repeat: -1,
           delay: i * 0.35,
         });
-        // Parallax: dots avanzan hacia arriba fuerte a distintas velocidades
         gsap.to(dot, {
           y: -(120 + i * 55),
           ease: "none",
@@ -236,18 +228,20 @@ export default function Proceso() {
             scrub: 0.8,
           },
         });
-      });
-
-      // ── 9. CTA reveal ──
-      if (ctaRef.current) {
-        gsap.fromTo(ctaRef.current,
-          { y: 50, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.1, ease: "power3.out",
-            scrollTrigger: { trigger: ctaRef.current, start: "top 95%", once: true } }
-        );
       }
+    });
 
-      // ── 10. Floating num parallax (slower drift) ──
+    // ── 9. CTA reveal ──
+    if (ctaRef.current) {
+      gsap.fromTo(ctaRef.current,
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.1, ease: "power3.out",
+          scrollTrigger: { trigger: ctaRef.current, start: "top 95%", once: true } }
+      );
+    }
+
+    // ── 10. Floating num parallax — solo en desktop ──
+    if (!isMobile) {
       sectionRef.current?.querySelectorAll(".proceso-num").forEach((num, i) => {
         gsap.to(num, {
           y: -40 - i * 10,
@@ -260,9 +254,9 @@ export default function Proceso() {
           },
         });
       });
-    };
+    }
 
-    loadGsap();
+    return () => ScrollTrigger.getAll().forEach(t => t.kill());
   }, []);
 
   const isDark = document.documentElement.classList.contains("dark");

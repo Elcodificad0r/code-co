@@ -126,7 +126,7 @@ function Hero() {
         <meta property="og:image" content="/img/hero-code.webp" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://tusitio.com" />
-        {useHeavyImage && <link rel="preload" as="image" href="/img/lowresherospline.jpg" />}
+        {useHeavyImage && <link rel="preload" as="image" href="/img/lowresherospline.webp" />}
       </Helmet>
 
       <style dangerouslySetInnerHTML={{ __html: heroStyles }} />
@@ -144,7 +144,7 @@ function Hero() {
         <span id="hero" style={{ position: "absolute", top: 0 }} />
 
         <img
-          src="img/lowresherospline.jpg"
+          src="img/lowresherospline.webp"
           alt="Hero background"
           style={{ ...fillStyle, objectFit: "cover", objectPosition: "center", opacity: dark ? 0.15 : 1 }}
           loading="eager"
