@@ -300,7 +300,7 @@ const EmailForm = ({ onBack, dark, externalSubmitRef }) => {
 
     try {
       await emailjs.send(
-  "service_9ypzsdp",
+  "service_s473zvh",
   "template_sn5a04s",
   {
     email: "hola@codenco.mx",
@@ -315,7 +315,7 @@ const EmailForm = ({ onBack, dark, externalSubmitRef }) => {
 );
 
 await emailjs.send(
-  "service_9ypzsdp",
+  "service_s473zvh",
   "template_sn5a04s",
   {
     email: email,
