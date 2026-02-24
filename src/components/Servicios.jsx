@@ -241,7 +241,11 @@ export default function ServicesHero() {
               ref={eyeRef}
               src="img/ojoservicios.webp"
               alt="Eye service"
+              width={256}
+              height={144}
               className="w-48 md:w-64 h-auto grayscale transition-opacity duration-300"
+              loading="lazy"
+              decoding="async"
             />
             <div
               className="absolute inset-0 border-2 border-gray-400 border-dashed"
@@ -283,12 +287,16 @@ export default function ServicesHero() {
 
         <div className="animate-section flex-shrink-0 flex flex-col items-center">
           <img
-            ref={barcodeRef}
-            src="img/codigoservicios.png"
-            alt="Barcode"
-            className="w-24 h-auto opacity-60 mb-4 transition-transform duration-300"
-            style={{ filter: dark ? "invert(1) opacity(0.6)" : undefined }}
-          />
+              ref={barcodeRef}
+              src="img/codigoservicios.webp"
+              alt="Barcode"
+              width={96}
+              height={54}
+              className="w-24 h-auto opacity-60 mb-4 transition-transform duration-300"
+              loading="lazy"
+              decoding="async"
+              style={{ filter: dark ? "invert(1) opacity(0.6)" : undefined }}
+            />
 
           <svg
             className="w-8 h-8 text-gray-600 animate-bounce"

@@ -614,43 +614,63 @@ const ContactSection = () => {
       );
     if (asteriskRef.current)
       gsap.fromTo(
-        asteriskRef.current,
-        { scale: 0.4, opacity: 0, rotation: -45 },
-        {
-          scale: 1,
-          opacity: 1,
-          rotation: 0,
-          duration: 1.4,
-          ease: "back.out(1.4)",
-          delay: 0.8,
-        }
-      );
+  asteriskRef.current,
+  { scale: 0.4, opacity: 0, rotation: -45 },
+  {
+    scale: 1,
+    opacity: 1,
+    rotation: 0,
+    duration: 1.4,
+    ease: "back.out(1.4)",
+    delay: 0.8,
+    clearProps: "transform", // 👈 esto libera el transform al terminar
+  }
+);
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && widgetRef.current && !showEmailForm) {
-      const existingScript = document.querySelector('script[src*="calendly"]');
-      if (!existingScript) {
-        const script = document.createElement("script");
-        script.src = "https://assets.calendly.com/assets/external/widget.js";
-        script.async = true;
-        script.onload = () => {
-          if (window.Calendly && widgetRef.current) {
-            window.Calendly.initInlineWidget({
-              url: "https://calendly.com/holacodenco/30min",
-              parentElement: widgetRef.current,
-            });
-          }
-        };
-        document.body.appendChild(script);
-      } else if (window.Calendly && widgetRef.current) {
-        window.Calendly.initInlineWidget({
-          url: "https://calendly.com/holacodenco/30min",
-          parentElement: widgetRef.current,
-        });
-      }
+  if (showEmailForm) return;
+
+  const loadCalendly = () => {
+    if (!widgetRef.current) return;
+    const existingScript = document.querySelector('script[src*="calendly"]');
+    if (!existingScript) {
+      const script = document.createElement("script");
+      script.src = "https://assets.calendly.com/assets/external/widget.js";
+      script.async = true;
+      script.onload = () => {
+        if (window.Calendly && widgetRef.current) {
+          window.Calendly.initInlineWidget({
+            url: "https://calendly.com/holacodenco/30min",
+            parentElement: widgetRef.current,
+          });
+        }
+      };
+      document.body.appendChild(script);
+    } else if (window.Calendly && widgetRef.current) {
+      window.Calendly.initInlineWidget({
+        url: "https://calendly.com/holacodenco/30min",
+        parentElement: widgetRef.current,
+      });
     }
-  }, [showEmailForm]);
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        loadCalendly();
+        observer.disconnect();
+      }
+    },
+    { rootMargin: "200px" }
+  );
+
+  const target = widgetRef.current || document.getElementById("contacto");
+  if (target) observer.observe(target);
+  else loadCalendly();
+
+  return () => observer.disconnect();
+}, [showEmailForm]);
 
   return (
     <>
@@ -664,7 +684,7 @@ const ContactSection = () => {
           position: absolute;
           top: 0;
           right: 0;
-          transform: translate(40%, -35%);
+          transform: translate(37%, -45%);
           pointer-events: none;
           z-index: 100001;
           width: clamp(14rem, 36vw, 28rem);

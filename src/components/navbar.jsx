@@ -177,6 +177,8 @@ const Navbar = ({ darkMode, onToggleDark, onNavClick }) => {
           <img
             src="img/logocodeco.webp"
             alt="Code & Co."
+            width={96}
+            height={48}
             onLoad={() => setLogoLoaded(true)}
             className="md:!hidden"
             style={{
@@ -189,6 +191,8 @@ const Navbar = ({ darkMode, onToggleDark, onNavClick }) => {
           <img
             src="img/logocodeco.webp"
             alt="Code & Co."
+            width={96}
+            height={48}
             className="hidden md:!block"
             style={{
               ...logoStyleDesktop,
@@ -201,6 +205,8 @@ const Navbar = ({ darkMode, onToggleDark, onNavClick }) => {
           <img
             src="img/logocodecolt.webp"
             alt="Code & Co."
+            width={96}
+            height={48}
             onLoad={() => setLogoDarkLoaded(true)}
             className="md:!hidden"
             style={{
@@ -213,6 +219,8 @@ const Navbar = ({ darkMode, onToggleDark, onNavClick }) => {
           <img
             src="img/logocodecolt.webp"
             alt="Code & Co."
+            width={96}
+            height={48}
             className="hidden md:!block"
             style={{
               ...logoStyleDesktop,

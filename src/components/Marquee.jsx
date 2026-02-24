@@ -186,14 +186,16 @@ function LogoPill({ src, pillBg, pillBorder }) {
       style={{ background: pillBg, border: `1px solid ${pillBorder}` }}
     >
       <div className="logoViewport">
-        <img
-          src={src}
-          alt="logo"
-          draggable={false}
-          className="logoImg"
-          loading="eager"
-          decoding="async"
-        />
+              <img
+        src={src}
+        alt="logo"
+        width={116}
+        height={65}
+        draggable={false}
+        className="logoImg"
+        loading="eager"
+        decoding="async"
+      />
       </div>
     </div>
   );
