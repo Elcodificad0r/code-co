@@ -66,6 +66,7 @@ function Hero() {
   const dark = useHtmlDark();
   const [splineLoaded, setSplineLoaded] = useState(false);
   const [loadSpline, setLoadSpline] = useState(false);
+  const [splineVisible, setSplineVisible] = useState(false);
   const [useHeavyImage, setUseHeavyImage] = useState(true);
 
   const bg           = dark ? "#1E1E1E"             : undefined;
@@ -87,12 +88,32 @@ function Hero() {
       setUseHeavyImage(false);
       return;
     }
-    if ("requestIdleCallback" in window) {
-      requestIdleCallback(() => setLoadSpline(true), { timeout: 2000 });
-    } else {
-      setTimeout(() => setLoadSpline(true), 1500);
-    }
+
+    // Carga Spline en background pero solo lo muestra al interactuar
+    const heroEl = document.getElementById("home");
+    if (!heroEl) return;
+
+    const onInteract = () => {
+      setLoadSpline(true);
+      heroEl.removeEventListener("mousemove", onInteract);
+      heroEl.removeEventListener("touchstart", onInteract);
+    };
+
+    heroEl.addEventListener("mousemove", onInteract, { passive: true });
+    heroEl.addEventListener("touchstart", onInteract, { passive: true });
+
+    return () => {
+      heroEl.removeEventListener("mousemove", onInteract);
+      heroEl.removeEventListener("touchstart", onInteract);
+    };
   }, []);
+
+  // Mostrar Spline con fade una vez cargado
+  useEffect(() => {
+    if (splineLoaded) {
+      requestAnimationFrame(() => setSplineVisible(true));
+    }
+  }, [splineLoaded]);
 
   const smoothScrollToId = useCallback((id) => {
     const el = document.getElementById(id);
@@ -153,7 +174,7 @@ function Hero() {
         />
 
         {loadSpline && (
-          <div style={{ ...fillStyle, opacity: splineLoaded ? 1 : 0, transition: "opacity 600ms ease" }}>
+          <div style={{ ...fillStyle, opacity: splineVisible ? 1 : 0, transition: "opacity 600ms ease" }}>
             <Suspense fallback={null}>
               <Spline
                 scene="https://prod.spline.design/8gCBWVCMxa2XLtJN/scene.splinecode"
