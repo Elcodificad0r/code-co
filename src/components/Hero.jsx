@@ -177,7 +177,7 @@ function Hero() {
           <div style={{ ...fillStyle, opacity: splineVisible ? 1 : 0, transition: "opacity 600ms ease" }}>
             <Suspense fallback={null}>
               <Spline
-                scene="https://prod.spline.design/8gCBWVCMxa2XLtJN/scene.splinecode"
+                scene="https://prod.spline.design/ynRlLABAAAV7NTz5/scene.splinecode"
                 onLoad={() => setSplineLoaded(true)}
               />
             </Suspense>

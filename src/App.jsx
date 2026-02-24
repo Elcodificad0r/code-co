@@ -1,6 +1,6 @@
 // src/App.jsx
 import "./App.css";
-import { useRef, lazy, Suspense } from "react";
+import { useRef, lazy, Suspense, useState, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
 import { HelmetProvider } from "react-helmet-async";
 import { useDarkMode } from "./hooks/useDarkMode";
@@ -18,16 +18,41 @@ const Faq = lazy(() => import("./components/Faq"));
 const Contact = lazy(() => import("./components/Contact"));
 const Procesos = lazy(() => import("./components/Procesos"));
 
-// SectionFallback recibe bg directamente — sin clases Tailwind arbitrarias
 const SectionFallback = ({ minH = "100vh", bg }) => (
   <div style={{ minHeight: minH, backgroundColor: bg }} />
 );
 
+// Secciones con Framer que NO deben montarse hasta que estén cerca o el nav las active
+const FRAMER_SECTIONS = ["nosotros", "work", "mision"];
+
 function App() {
   const { darkMode, toggle } = useDarkMode();
-
-  // Una sola fuente de verdad — igual que usan todos los componentes internamente
   const bg = darkMode ? "#1E1E1E" : "#ECECEC";
+
+  // Controla qué secciones con Framer ya están "desbloqueadas" para montarse
+  const [unlockedSections, setUnlockedSections] = useState(new Set());
+
+  // Desbloquea una sección — llamado por el navbar al hacer click
+  const unlockSection = useCallback((sectionId) => {
+    setUnlockedSections((prev) => {
+      if (prev.has(sectionId)) return prev;
+      const next = new Set(prev);
+      next.add(sectionId);
+      return next;
+    });
+  }, []);
+
+  // Callback que el navbar llama antes de hacer scroll
+  const onNavClick = useCallback((sectionId) => {
+    // Desbloquea la sección clickeada y todas las intermedias
+    const order = ["hero", "mision", "nosotros", "servicios", "precios", "procesos", "work", "faq", "contacto"];
+    const idx = order.indexOf(sectionId);
+    if (idx === -1) return;
+    // Desbloquea todo hasta la sección destino
+    order.slice(0, idx + 1).forEach((id) => {
+      if (FRAMER_SECTIONS.includes(id)) unlockSection(id);
+    });
+  }, [unlockSection]);
 
   const heroRef = useRef(null);
   const misionRef = useRef(null);
@@ -48,10 +73,31 @@ function App() {
     rootMargin: "-100px 0px",
   });
 
+  // Desbloquea secciones Framer cuando se acercan al viewport (300px antes)
+  const { ref: nosotrosNearRef } = useInView({
+    threshold: 0,
+    rootMargin: "300px 0px",
+    onChange: (inView) => { if (inView) unlockSection("nosotros"); },
+  });
+  const { ref: workNearRef } = useInView({
+    threshold: 0,
+    rootMargin: "300px 0px",
+    onChange: (inView) => { if (inView) unlockSection("work"); },
+  });
+  const { ref: misionNearRef } = useInView({
+    threshold: 0,
+    rootMargin: "300px 0px",
+    onChange: (inView) => { if (inView) unlockSection("mision"); },
+  });
+
   const shouldUseBlackText =
     isWhyUsInView || isWorkInView || isServiciosInView || isFaqInView || isProcesosInView;
 
   const shouldUseWhiteText = isContactoInView;
+
+  const isMisionUnlocked = unlockedSections.has("mision");
+  const isNosotrosUnlocked = unlockedSections.has("nosotros");
+  const isWorkUnlocked = unlockedSections.has("work");
 
   return (
     <HelmetProvider>
@@ -67,32 +113,45 @@ function App() {
             isDarkSection={shouldUseBlackText && !shouldUseWhiteText}
             darkMode={darkMode}
             onToggleDark={toggle}
+            onNavClick={onNavClick}
           />
         </Suspense>
 
-        <Suspense fallback={<SectionFallback bg={bg} />}>
-          <HeroToMisionCinematic
-            id="hero"
-            heroRef={heroRef}
-            misionRef={misionRef}
-            Hero={Hero}
-            Mision={Mision}
-          />
-        </Suspense>
+        {/* HeroToMision — siempre montado, contiene Hero y Mision */}
+        <div ref={misionNearRef}>
+          <Suspense fallback={<SectionFallback bg={bg} />}>
+            <HeroToMisionCinematic
+              id="hero"
+              heroRef={heroRef}
+              misionRef={misionRef}
+              Hero={Hero}
+              // Mision solo se pasa cuando está desbloqueada — evita que Framer corra desde el inicio
+              Mision={isMisionUnlocked ? Mision : null}
+            />
+          </Suspense>
+        </div>
 
-        {/* Marquee recibe darkMode — maneja su propio fondo internamente */}
         <Suspense fallback={<SectionFallback minH="80px" bg={bg} />}>
           <Marquee darkMode={darkMode} />
         </Suspense>
 
+        {/* Nosotros — se monta solo cuando está cerca o el nav lo activa */}
         <section
           id="nosotros"
-          ref={(el) => { nosotrosRef.current = el; nosotrosInViewRef(el); }}
+          ref={(el) => {
+            nosotrosRef.current = el;
+            nosotrosInViewRef(el);
+            nosotrosNearRef(el);
+          }}
           style={{ backgroundColor: bg }}
         >
-          <Suspense fallback={<SectionFallback bg={bg} />}>
-            <Nosotros />
-          </Suspense>
+          {isNosotrosUnlocked ? (
+            <Suspense fallback={<SectionFallback bg={bg} />}>
+              <Nosotros />
+            </Suspense>
+          ) : (
+            <SectionFallback bg={bg} />
+          )}
         </section>
 
         <section
@@ -127,15 +186,24 @@ function App() {
           </Suspense>
         </section>
 
+        {/* Work — se monta solo cuando está cerca o el nav lo activa */}
         <section
           id="work"
-          ref={(el) => { workRef.current = el; workInViewRef(el); }}
+          ref={(el) => {
+            workRef.current = el;
+            workInViewRef(el);
+            workNearRef(el);
+          }}
           className="min-h-screen"
           style={{ backgroundColor: bg }}
         >
-          <Suspense fallback={<SectionFallback bg={bg} />}>
-            <Work />
-          </Suspense>
+          {isWorkUnlocked ? (
+            <Suspense fallback={<SectionFallback bg={bg} />}>
+              <Work />
+            </Suspense>
+          ) : (
+            <SectionFallback bg={bg} />
+          )}
         </section>
 
         <section

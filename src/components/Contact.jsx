@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
+import { gsap } from "gsap";
 
 function useHtmlDark() {
   const [dark, setDark] = useState(() =>
@@ -577,7 +578,6 @@ const ContactSection = () => {
   const titleRef = useRef(null);
   const widgetRef = useRef(null);
   const asteriskRef = useRef(null);
-  const [gsapLoaded, setGsapLoaded] = useState(false);
   const [showTerminos, setShowTerminos] = useState(false);
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [showFormHint, setShowFormHint] = useState(false);
@@ -591,55 +591,41 @@ const ContactSection = () => {
     } catch {}
   }, []);
 
+  // ✅ GSAP desde el bundle — sin CDN
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      if (!window.gsap) {
-        const script = document.createElement("script");
-        script.src =
-          "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js";
-        script.onload = () => setGsapLoaded(true);
-        document.head.appendChild(script);
-      } else setGsapLoaded(true);
-    }
+    if (titleRef.current)
+      gsap.fromTo(
+        titleRef.current,
+        { y: 80, opacity: 0, skewY: 2 },
+        {
+          y: 0,
+          opacity: 1,
+          skewY: 0,
+          duration: 1.2,
+          ease: "power3.out",
+          delay: 0.3,
+        }
+      );
+    if (widgetRef.current)
+      gsap.fromTo(
+        widgetRef.current,
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.5 }
+      );
+    if (asteriskRef.current)
+      gsap.fromTo(
+        asteriskRef.current,
+        { scale: 0.4, opacity: 0, rotation: -45 },
+        {
+          scale: 1,
+          opacity: 1,
+          rotation: 0,
+          duration: 1.4,
+          ease: "back.out(1.4)",
+          delay: 0.8,
+        }
+      );
   }, []);
-
-  useEffect(() => {
-    if (gsapLoaded && window.gsap) {
-      const gsap = window.gsap;
-      if (titleRef.current)
-        gsap.fromTo(
-          titleRef.current,
-          { y: 80, opacity: 0, skewY: 2 },
-          {
-            y: 0,
-            opacity: 1,
-            skewY: 0,
-            duration: 1.2,
-            ease: "power3.out",
-            delay: 0.3,
-          }
-        );
-      if (widgetRef.current)
-        gsap.fromTo(
-          widgetRef.current,
-          { y: 50, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.5 }
-        );
-      if (asteriskRef.current)
-        gsap.fromTo(
-          asteriskRef.current,
-          { scale: 0.4, opacity: 0, rotation: -45 },
-          {
-            scale: 1,
-            opacity: 1,
-            rotation: 0,
-            duration: 1.4,
-            ease: "back.out(1.4)",
-            delay: 0.8,
-          }
-        );
-    }
-  }, [gsapLoaded]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && widgetRef.current && !showEmailForm) {
@@ -824,7 +810,7 @@ const ContactSection = () => {
         }
 
         /* ─────────────────────────────────────────────
-           MOBILE: evitar que el glow se “superponga”
+           MOBILE: evitar que el glow se "superponga"
            (sin mover el asterisk)
            ───────────────────────────────────────────── */
         @media (max-width: 767px) {

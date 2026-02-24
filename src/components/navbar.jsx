@@ -21,7 +21,7 @@ const DarkToggle = ({ darkMode, onToggle }) => (
   </button>
 );
 
-const Navbar = ({ darkMode, onToggleDark }) => {
+const Navbar = ({ darkMode, onToggleDark, onNavClick }) => {
   const navRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [logoLoaded, setLogoLoaded] = useState(false);
@@ -92,6 +92,8 @@ const Navbar = ({ darkMode, onToggleDark }) => {
         spy={!noSpy}
         offset={-80}
         activeClass="is-active"
+        href={id === "hero" ? "#" : `#${id}`}
+        onClick={() => onNavClick?.(id)}
         className={
           (isContacto
             ? `group relative cursor-pointer text-[11px] tracking-[0.18em] font-space uppercase text-white transition-all duration-300 px-5 py-[7px] rounded-full bg-[#0520F5] border border-[#0520F5]/60 shadow-[0_0_16px_rgba(5,32,245,0.45),0_0_32px_rgba(5,32,245,0.2)] hover:shadow-[0_0_22px_rgba(5,32,245,0.65),0_0_48px_rgba(5,32,245,0.3)] hover:-translate-y-[1px] hover:bg-[#0318d4] [&.is-active]:shadow-[0_0_24px_rgba(5,32,245,0.7),0_0_52px_rgba(5,32,245,0.35)]`
@@ -294,7 +296,8 @@ const Navbar = ({ darkMode, onToggleDark }) => {
                   spy
                   offset={-70}
                   activeClass="is-active"
-                  onClick={() => setIsOpen(false)}
+                  href={`#${item.id}`}
+                  onClick={() => { onNavClick?.(item.id); setIsOpen(false); }}
                   className="cursor-pointer w-full py-4 px-6 mt-1 bg-[#0520F5] text-white text-base tracking-[0.18em] font-space uppercase text-center transition-all duration-200 hover:bg-[#0318d4] [&.is-active]:bg-[#0318d4]"
                 >
                   {item.label}
@@ -308,7 +311,8 @@ const Navbar = ({ darkMode, onToggleDark }) => {
                   spy={!item.noSpy}
                   offset={-70}
                   activeClass="is-active"
-                  onClick={() => setIsOpen(false)}
+                  href={item.id === "hero" ? "#" : `#${item.id}`}
+                  onClick={() => { onNavClick?.(item.id); setIsOpen(false); }}
                   className={`cursor-pointer text-base tracking-wide font-space uppercase opacity-50 hover:opacity-100 transition [&.is-active]:opacity-100 ${
                     index === 0 ? "pt-4" : ""
                   } py-3 px-6 border-b w-full${forcedActive ? " is-active" : ""}`}
