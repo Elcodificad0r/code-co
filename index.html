@@ -85,6 +85,9 @@
       })();
     </script>
 
+    <!-- Preload hero image — elimina el gris inicial -->
+    <link rel="preload" as="image" href="/img/lowresherospline.webp" fetchpriority="high" />
+
     <!-- Google Fonts (no bloqueante) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -100,6 +103,9 @@
         rel="stylesheet"
       />
     </noscript>
+
+    <!-- Preload fuente crítica — elimina FOUT (flash of unstyled text) -->
+    <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/spacegrotesk/v16/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gozuPTPgz0dZ8s.woff2" crossorigin />
 
   </head>
   <body class="font-space bg-lightBg">
