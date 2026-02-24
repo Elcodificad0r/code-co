@@ -125,7 +125,7 @@ function Hero() {
         <meta property="og:description" content="Sitios web únicos, sin plantillas y sin límites. Desarrollados con código limpio y alto rendimiento." />
         <meta property="og:image" content="/img/hero-code.webp" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://tusitio.com" />
+        <meta property="og:url" content="https://codenco.mx" />
         {useHeavyImage && <link rel="preload" as="image" href="/img/lowresherospline.webp" />}
       </Helmet>
 
