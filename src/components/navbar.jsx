@@ -46,19 +46,26 @@ const Navbar = ({ darkMode, onToggleDark, onNavClick }) => {
   const col3 = navItems.slice(6, 9);
 
   useEffect(() => {
-    const setNavHeightVar = () => {
+  const setNavHeightVar = () => {
+    if (!navRef.current) return;
+    requestAnimationFrame(() => {
       if (!navRef.current) return;
       const height = Math.ceil(navRef.current.getBoundingClientRect().height);
       document.documentElement.style.setProperty("--nav-h", `${height}px`);
-    };
-    setNavHeightVar();
-    window.addEventListener("resize", setNavHeightVar);
-    const t = setTimeout(setNavHeightVar, 0);
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener("resize", setNavHeightVar);
-    };
-  }, [isOpen]);
+    });
+  };
+
+  setNavHeightVar();
+  const t = setTimeout(setNavHeightVar, 100);
+
+  const ro = new ResizeObserver(setNavHeightVar);
+  if (navRef.current) ro.observe(navRef.current);
+
+  return () => {
+    clearTimeout(t);
+    ro.disconnect();
+  };
+}, [isOpen]);
 
   useEffect(() => {
     const onScroll = () => {

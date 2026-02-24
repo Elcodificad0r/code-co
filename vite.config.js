@@ -7,47 +7,26 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
 
   build: {
-    chunkSizeWarningLimit: 1500, // solo para el warning visual
+    chunkSizeWarningLimit: 1500,
+    cssCodeSplit: false,
 
     rollupOptions: {
       output: {
         manualChunks(id) {
           if (!id.includes("node_modules")) return;
 
-          // 🔹 React core
           if (
             id.includes("react") ||
             id.includes("react-dom") ||
             id.includes("scheduler")
-          ) {
-            return "react-vendor";
-          }
+          ) return "react-vendor";
 
-          // 🔹 Animaciones
-          if (id.includes("framer-motion")) {
-            return "framer";
-          }
+          if (id.includes("framer-motion")) return "framer";
+          if (id.includes("gsap")) return "gsap";
+          if (id.includes("@splinetool")) return "spline";
+          if (id.includes("react-helmet-async")) return "helmet";
+          if (id.includes("react-intersection-observer")) return "intersection";
 
-          if (id.includes("gsap")) {
-            return "gsap";
-          }
-
-          // 🔹 3D (muy pesado)
-          if (id.includes("@splinetool")) {
-            return "spline";
-          }
-
-          // 🔹 Helmet
-          if (id.includes("react-helmet-async")) {
-            return "helmet";
-          }
-
-          // 🔹 Intersection Observer
-          if (id.includes("react-intersection-observer")) {
-            return "intersection";
-          }
-
-          // 🔹 Todo lo demás
           return "vendor";
         },
       },
