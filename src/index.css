@@ -1,31 +1,31 @@
 /* Import fonts */
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('/fonts/space-grotesk-400.woff2') format('woff2');
+  src: url('./fonts/space-grotesk-300.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('./fonts/space-grotesk-400.woff2') format('woff2');
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('/fonts/space-grotesk-500.woff2') format('woff2');
-  font-weight: 500;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Space Grotesk';
-  src: url('/fonts/space-grotesk-600.woff2') format('woff2');
+  src: url('./fonts/space-grotesk-600.woff2') format('woff2');
   font-weight: 600;
   font-display: swap;
 }
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('/fonts/space-grotesk-700.woff2') format('woff2');
+  src: url('./fonts/space-grotesk-700.woff2') format('woff2');
   font-weight: 700;
   font-display: swap;
 }
 @font-face {
   font-family: 'Rubik 80s Fade';
-  src: url('/fonts/rubik-80s-fade.woff2') format('woff2');
+  src: url('./fonts/rubik-80s-fade.woff2') format('woff2');
   font-weight: 400;
   font-display: swap;
 }
@@ -39,7 +39,6 @@ html {
   background-color: #ECECEC;
 }
 
-/* Solo oscuro cuando Tailwind agrega la clase .dark — nunca por OS preference */
 html.dark {
   background-color: #1E1E1E;
 }
@@ -62,6 +61,11 @@ html.dark body {
   .font-rubik80s {
     font-family: 'Rubik 80s Fade', Arial, Helvetica, sans-serif;
   }
+}
+
+.force-rubik {
+  font-family: 'Rubik 80s Fade', Arial, Helvetica, sans-serif !important;
+  font-weight: normal !important;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
