@@ -47,27 +47,29 @@ export default function Marquee({ darkMode = false }) {
     };
 
     const setupAnimation = async () => {
-      await waitImages();
-      const firstSet = track.querySelector(".marquee-set");
-      if (!firstSet) return;
-      const setWidth = firstSet.getBoundingClientRect().width;
-      const gap = window.matchMedia("(max-width: 640px)").matches ? 18 : 22;
-      const totalWidth = setWidth + gap;
-      const speed = getSpeed();
-      const duration = totalWidth / speed;
-      track.style.animation = `marqueeScroll ${duration}s linear infinite`;
-      const styleSheet = document.createElement("style");
-      styleSheet.textContent = `
-        @keyframes marqueeScroll {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-${totalWidth}px); }
-        }
-      `;
-      const oldStyle = document.getElementById("marquee-animation");
-      if (oldStyle) oldStyle.remove();
-      styleSheet.id = "marquee-animation";
-      document.head.appendChild(styleSheet);
-    };
+  await waitImages();
+  requestAnimationFrame(() => {
+    const firstSet = track.querySelector(".marquee-set");
+    if (!firstSet) return;
+    const setWidth = firstSet.getBoundingClientRect().width;
+    const gap = window.matchMedia("(max-width: 640px)").matches ? 18 : 22;
+    const totalWidth = setWidth + gap;
+    const speed = getSpeed();
+    const duration = totalWidth / speed;
+    track.style.animation = `marqueeScroll ${duration}s linear infinite`;
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `
+      @keyframes marqueeScroll {
+        0%   { transform: translateX(0); }
+        100% { transform: translateX(-${totalWidth}px); }
+      }
+    `;
+    const oldStyle = document.getElementById("marquee-animation");
+    if (oldStyle) oldStyle.remove();
+    styleSheet.id = "marquee-animation";
+    document.head.appendChild(styleSheet);
+  });
+};
 
     setupAnimation();
 

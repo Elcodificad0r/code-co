@@ -36,33 +36,15 @@
       "logo": "https://codenco.mx/img/logocodeco.webp",
       "description": "Creamos aplicaciones web rápidas, escalables y sin límites. Código real, rendimiento real.",
       "email": "hola@codenco.mx",
-      "areaServed": {
-        "@type": "Country",
-        "name": "México"
-      },
+      "areaServed": { "@type": "Country", "name": "México" },
       "priceRange": "$$",
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Planes de desarrollo web",
         "itemListElement": [
-          {
-            "@type": "Offer",
-            "name": "Sitio Web Básico",
-            "price": "1999",
-            "priceCurrency": "MXN"
-          },
-          {
-            "@type": "Offer",
-            "name": "Aplicación Web Profesional",
-            "price": "6999",
-            "priceCurrency": "MXN"
-          },
-          {
-            "@type": "Offer",
-            "name": "Negocio Digital E-Commerce",
-            "price": "9999",
-            "priceCurrency": "MXN"
-          }
+          { "@type": "Offer", "name": "Sitio Web Básico", "price": "1999", "priceCurrency": "MXN" },
+          { "@type": "Offer", "name": "Aplicación Web Profesional", "price": "6999", "priceCurrency": "MXN" },
+          { "@type": "Offer", "name": "Negocio Digital E-Commerce", "price": "9999", "priceCurrency": "MXN" }
         ]
       },
       "sameAs": [
@@ -85,31 +67,69 @@
       })();
     </script>
 
-    <!-- Preload hero image — elimina el gris inicial -->
+    <!-- Preload hero image -->
     <link rel="preload" as="image" href="/img/lowresherospline.webp" fetchpriority="high" />
+
+    <!-- Preload fuentes críticas -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-400.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-600.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-700.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/rubik-80s-fade.woff2" crossorigin />
 
     <!-- Google Fonts (no bloqueante) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Rubik+80s+Fade&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Rubik+80s+Fade&family=Space+Grotesk:wght@300;400;600;700&display=swap"
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
-        href="https://fonts.googleapis.com/css2?family=Rubik+80s+Fade&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Rubik+80s+Fade&family=Space+Grotesk:wght@300;400;600;700&display=swap"
         rel="stylesheet"
       />
     </noscript>
 
-    <!-- Preload fuente crítica — elimina FOUT (flash of unstyled text) -->
-    <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/spacegrotesk/v16/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gozuPTPgz0dZ8s.woff2" crossorigin />
-
   </head>
   <body class="font-space bg-lightBg">
+
+    <!-- Placeholder pre-React: elimina frames grises en los primeros segundos -->
+    <div id="hero-placeholder" style="
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #ECECEC;
+      pointer-events: none;
+    ">
+      <img
+        src="/img/preloadercodenco.webp"
+        style="width:100%; height:100%; object-fit:cover; display:block;"
+        alt=""
+      />
+    </div>
+
     <div id="root"></div>
+
     <script type="module" src="./src/main.jsx"></script>
+
+    <script>
+      (function() {
+        var placeholder = document.getElementById('hero-placeholder');
+        if (!placeholder) return;
+        var root = document.getElementById('root');
+        var observer = new MutationObserver(function() {
+          if (root.firstElementChild) {
+            placeholder.style.transition = 'opacity 300ms ease';
+            placeholder.style.opacity = '0';
+            setTimeout(function() { placeholder.remove(); }, 320);
+            observer.disconnect();
+          }
+        });
+        observer.observe(root, { childList: true });
+      })();
+    </script>
+
   </body>
 </html>

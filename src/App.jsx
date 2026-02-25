@@ -117,6 +117,7 @@ function App() {
           />
         </Suspense>
 
+        <main>
         {/* HeroToMision — siempre montado, contiene Hero y Mision */}
         <div ref={misionNearRef}>
           <Suspense fallback={<SectionFallback bg={bg} />}>
@@ -227,6 +228,7 @@ function App() {
             <Contact />
           </Suspense>
         </section>
+        </main>
       </div>
     </HelmetProvider>
   );

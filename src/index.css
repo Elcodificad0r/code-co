@@ -1,32 +1,26 @@
 /* Import fonts */
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('./fonts/space-grotesk-300.woff2') format('woff2');
+  src: url('/fonts/space-grotesk-300.woff2') format('woff2');
   font-weight: 300;
   font-display: swap;
 }
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('./fonts/space-grotesk-400.woff2') format('woff2');
+  src: url('/fonts/space-grotesk-400.woff2') format('woff2');
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('./fonts/space-grotesk-600.woff2') format('woff2');
+  src: url('/fonts/space-grotesk-600.woff2') format('woff2');
   font-weight: 600;
   font-display: swap;
 }
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('./fonts/space-grotesk-700.woff2') format('woff2');
+  src: url('/fonts/space-grotesk-700.woff2') format('woff2');
   font-weight: 700;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Rubik 80s Fade';
-  src: url('./fonts/rubik-80s-fade.woff2') format('woff2');
-  font-weight: 400;
   font-display: swap;
 }
 

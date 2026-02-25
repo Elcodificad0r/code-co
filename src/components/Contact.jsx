@@ -893,12 +893,12 @@ const ContactSection = () => {
 
                 <div className="space-y-6">
                   <div className="font-space" style={{ color: textMuted }}>
-                    <h3
+                    <h2
                       className="font-bold text-lg mb-3"
                       style={{ color: textPrimary }}
                     >
                       ¿Qué incluye la llamada?
-                    </h3>
+                    </h2>
                     <ul className="space-y-2 text-base text-left max-w-md mx-auto lg:!mx-0 lg:!max-w-none">
                       <li className="flex items-start space-x-3">
                         <span className="font-bold" style={{ color: accentBlue }}>

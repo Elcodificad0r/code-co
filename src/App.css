@@ -1,12 +1,10 @@
 @import "tailwindcss";
 
-html{
-  background-color: #ECECEC;
-  scroll-behavior: smooth;
-}
-
-body{
-  font-family: 'Inter', sans-serif;
+@font-face {
+  font-family: 'Rubik 80s Fade';
+  src: url('/fonts/rubik-80s-fade.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
 }
 
 .force-rubik {
